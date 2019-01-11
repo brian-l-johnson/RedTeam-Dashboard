@@ -14,7 +14,7 @@ router.post('/', function(req, res) {
     var nmapData = req.body;
     var seenHosts = {};
 
-    Host.find({}, "ip", function(err, hosts) { 
+    Host.find({state: "up"}, "ip", function(err, hosts) { 
         console.log(hosts);
         for(i = 0; i< hosts.length; i++) {
             seenHosts[hosts[i]['ip']] = false;
@@ -48,11 +48,12 @@ router.post('/', function(req, res) {
                             console.log("port "+port+" missing from current scan");
                             for(i = 0; i<result['openPorts'].length; i++) {
                                 if(result['openPorts'][i]['port'] == port) {
-                                    result['openPorts'][i]['state'] = "closed";
+                                    
                                     result['openPorts'][i]["history"].push({
-                                        state: "open",
+                                        state: result['openPorts'][i]['state'],
                                         start: result["openPorts"][i]['lastChanged']
                                     });
+                                    result['openPorts'][i]['state'] = "closed";
                                     result['openPorts'][i]["lastChanged"] = new Date();
                                     console.log("setting state to closed");
                                     break;
@@ -77,8 +78,39 @@ router.post('/', function(req, res) {
         },
         function(err, results) {
             console.log(seenHosts);
-            res.status(200).send("ok");
+            async.each(Object.keys(seenHosts), function(hostIP, callback2) {
+                if(seenHosts[hostIP] == false) {
+                    console.log(hostIP+" missing from current scan");
+                    Host.findOne({ip: hostIP}, function(err, host) {
+                        host['state'] = "down";
+                        for(i = 0; i<host['openPorts'].length; i++) {
+                            host['openPorts'][i]['history'].push({
+                                state: host['openPorts'][i]['state'],
+                                start: host['openPorts'][i]['lastChanged']
+                            });
+                            host['openPorts'][i]['state'] = "closed";
+                            host['openPorts'][i]['lastChanged'] = new Date();
+                        }
+                        host['lastChanged'] = new Date();
+                        host.save(function(err) {
+                            if(err) throw err;
+                            console.log("updated host as down");
+                        });
+                    })
+                }
+                callback2();
+
+            }),
+            function(err) {
+                console.log("done looking for missing hosts");
+                console.log("foo");
+            }
+            //res.status(200).send("ok");
         })
+    })   
+    .then(function() {
+        console.log("all done");
+        res.status(200).send("foo");
     });
 
 
