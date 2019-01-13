@@ -13,7 +13,8 @@ router.post('/', function(req, res) {
 	console.log("in post handler")
 	console.log("ip is: "+ req.body.ip);
 	Team.create({
-		name : req.body.name
+		name : req.body.name,
+		range : req.body.range
 	},
 	function(err, team) {
 		if (err) {

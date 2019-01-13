@@ -13,7 +13,7 @@ var hostSchema = new mongoose.Schema({
     os: String,
     openPorts: [portSchema],
     comments: [commentSchema],
-    team: mongoose.Schema.Types.ObjectId,
+    team: Number
 });
 
 var Host = mongoose.model('Host', hostSchema);

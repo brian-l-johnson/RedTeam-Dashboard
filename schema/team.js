@@ -4,6 +4,8 @@ var commentSchema = require('./comment').schema;
 
 var teamSchema = new mongoose.Schema({
 	name: String,
+	id: Number,
+	range: String,
 	comments: [commentSchema]
 
 });
