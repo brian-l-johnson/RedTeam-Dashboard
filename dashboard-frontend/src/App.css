@@ -24,11 +24,12 @@
 
 .teamsContainer{
   display: flex;
+  align-items: stretch;
 }
 
 .teamContainer {
-  flex=grow: 1;
-  margin: auto;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .hostContainer {

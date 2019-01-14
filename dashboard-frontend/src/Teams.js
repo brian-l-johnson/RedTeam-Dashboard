@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
-import { NativeBuffer } from 'mongoose';
 
 class Teams extends Component {
     constructor(props) {
@@ -42,16 +41,37 @@ class Teams extends Component {
           console.log(event.target.name);
           this.setState({['newTeam'[event.target.name]]: event.target.value});
       }
+      handleClick(teamName) {
+          console.log(teamName);
+          this.props.history.push("/team/"+teamName);
+      }
     
     
     render() {
 		return (
-            <div>
-                {
-                    this.state.teams.map(team => (
-                        <div key={team.name}>Hi {team.name}</div>
-                    ))
-                }
+            <div className="container">
+                <table className="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Team Name</th>
+                            <th>IP Range</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                        this.state.teams.map(team => (
+                            <tr key={team.name} onClick={this.handleClick.bind(this, team._id)}> 
+                                <td>{team.name}</td>
+                                <td>{team.range}</td>
+                            </tr>
+
+
+                        ))
+                        }
+                    </tbody>
+                
+                </table>
+
                 <div>
                     <h1>Create New Team</h1>
                     <form onSubmit={this.handleSubmit} id="newTeamForm">

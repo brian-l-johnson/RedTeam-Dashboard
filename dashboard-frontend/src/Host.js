@@ -15,8 +15,8 @@ class Host extends Component{
 	render() {
 		return (
 			<div className="hostContainer card">
-				<h5 class="card-title">{this.props.ip}</h5>
-				<h5 class="card-subtitle">{this.props.hostname}</h5>
+				<h5 className="card-title">{this.props.ip}</h5>
+				<h5 className="card-subtitle">{this.props.hostname}</h5>
 				
 				{this.createPorts(this.props.openPorts)}
 			</div>

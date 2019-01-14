@@ -30,6 +30,13 @@ router.get('/', function(req, res) {
 	});
 });
 
+router.get('/team/:team', function(req, res) {
+	Host.find({team: req.params.team}, function(err, hosts) {
+		if(err) return res.status(500).send("there was a problem finding the hosts");
+		res.status(200).send(hosts);
+	});
+})
+
 router.get('/:ip', function(req, res){
 	Host.findOne({ip: req.params.ip}, function(err, host) {
 		if(err) return res.status(300).send("There was a problem finding the host");

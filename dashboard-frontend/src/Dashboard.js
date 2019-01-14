@@ -6,33 +6,23 @@ class Dashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-          "teams": 
-            [
-              {"name": "Team 1", "range": "192.168.1.0/24"},
-              {"name": "Team 2", "range": "192.168.2.0/24"},
-              {"name": "Team 3", "range": "192.168.3.0/24"},
-              {"name": "Team 4", "range": "192.168.4.0/24"},
-              {"name": "Team 5", "range": "192.168.5.0/24"},
-              {"name": "Team 6", "range": "192.168.6.0/24"},
-              {"name": "Team 7", "range": "192.168.7.0/24"}
-             ],
-          "counter" :0
+          "teams": [],
         }
       }
     
       componentDidMount() {
-          /*
-          this.interval = setInterval(() => fetch('http://127.0.0.1:3001/hosts')
+          
+          this.interval = setInterval(() => fetch('http://127.0.0.1:3001/teams')
             .then(response => response.json())
-            .then(data => this.setState({hosts: data})),1000);
-        */
+            .then(data => this.setState({teams: data})),1000);
+        
       }
       componentWillUnmount() {
           clearInterval(this.interval);
       }
     
       createTeam(team) {
-        return (<Team name={team.name} range={team.range} key={team.name} />)
+        return (<Team name={team.name} range={team.range} key={team.name} id={team._id} />)
       }
       createTeams(teams) {
         return teams.map(this.createTeam);  

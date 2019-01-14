@@ -9,7 +9,8 @@ router.use(bodyParser.json());
 var Host = require('./schema/Host');
 //var Port = require('./schema/Port');
 
-router.post('/', function(req, res) {
+router.post('/:team', function(req, res) {
+    var team = req.params.team;
     console.log("in post handler")
     var nmapData = req.body;
     var seenHosts = {};
@@ -68,6 +69,7 @@ router.post('/', function(req, res) {
                 else {
                     console.log("could not find result for "+host['ip']);
                     var newHost = new Host(host);
+                    newHost['team'] = team;
                     newHost.save(function(err) {
                         if(err) throw err;
                         console.log("saved host");
