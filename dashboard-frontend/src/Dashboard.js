@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
+
 import Team from './Team';
 
 class Dashboard extends Component {
@@ -22,7 +23,7 @@ class Dashboard extends Component {
       }
     
       createTeam(team) {
-        return (<Team name={team.name} range={team.range} key={team.name} id={team._id} />)
+        return (<Team name={team.name} range={team.range} key={team.name} id={team._id} summary={true}/>)
       }
       createTeams(teams) {
         return teams.map(this.createTeam);  
@@ -31,7 +32,7 @@ class Dashboard extends Component {
     render() {
 		return (
             <div>
-                <div className="teamsContainer">
+                <div className="teamsContainer" >
                     {this.createTeams(this.state.teams)}
                  </div>
             </div>

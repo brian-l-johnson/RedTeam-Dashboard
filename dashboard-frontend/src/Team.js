@@ -1,19 +1,27 @@
 import React, { Component } from 'react';
+import { Link, withRouter } from 'react-router-dom';
 
 import Host from './Host';
+import Comments from './Comments';
 
 class Team extends Component{
 	constructor(props) {
     	super(props);
     	this.state = {
 			"hosts": [],
-			"team": {}
+			"team": {"comments": []}
 		}
-		if(typeof(this.props.match) !== 'undefined') {
-			this.state.id = this.props.match.params.id;
+		if(typeof(this.props.id) !== 'undefined') {
+			this.state.id = this.props.id;
 		}
 		else {
-			this.state.id = this.props.id;
+			this.state.id = this.props.match.params.id;
+		}
+		if(typeof(this.props.summary !== 'undefined') && this.props.summary === true) {
+			this.state.summary = true;
+		}
+		else {
+			this.state.summary = false;
 		}
   	}
 
@@ -31,7 +39,6 @@ class Team extends Component{
 		clearInterval(this.teamInterval);
 		clearInterval(this.hostsInterval);
 	}
-	
 
   	createHost(host) {
   		return (<Host hostname={host.hostname} ip={host.ip} openPorts={host.openPorts} key={host._id} />);
@@ -41,20 +48,33 @@ class Team extends Component{
   		return hosts.map(this.createHost);
   	}
 	
+	handleClick(teamName) {
+		console.log(teamName);
+		this.props.history.push("/team/"+teamName);
+	}
+
+
 	render() {
 		return (
-			<div className="teamContainer shadow p-3 mb-5 bg-white rounded card">
+			<div className="teamContainer shadow p-3 mb-5 bg-white rounded card" onClick={this.handleClick.bind(this, this.state.id)}>
 				<h1 className="card-title">Name: {this.state.team.name}</h1>
 				<h2 className="card-subtitle">Range: {this.state.team.range}</h2>
+				{
+					(this.state.summary && (this.state.team.comments.length > 0)) && <i className="fas fa-comment"></i>
+				}
 				<br/>
 				{
 					this.state.hosts.map(host => (
-						<Host hostname={host.hostname} ip={host.ip} openPorts={host.openPorts} key={host._id} />	
+							host.state === "up" && <Host hostname={host.hostname} ip={host.ip} openPorts={host.openPorts} key={host._id} />
 					))
+				}
+				{
+					!this.state.summary && <Comments commentArray={this.state.team.comments} commentType="teams" scope={this.state.team._id}/>
+					
 				}
 			</div>
 		);
 	}
 
 }
-export default Team;
+export default withRouter(Team) ;

@@ -28,42 +28,71 @@ router.post('/:team', function(req, res) {
                 seenHosts[host['ip']] = true;
                 if(result) {
                     console.log("found result for "+host['ip']);
-                    seenPorts = {};
-                    for(i = 0; i<result['openPorts'].length; i++) {
-                        seenPorts[result['openPorts'][i]['port']] = false;
-                    }
-                    for(i = 0; i<host['openPorts'].length; i++) {
-                        if(host['openPorts'][i]['port'] in seenPorts) {
-                            console.log("port in last scan");
+                    if(result['state'] == "down") {
+                        result['state'] = "up";
+                        result['lastChanged'] = new Date();
+                        portMap = {};
+                        for(i=0; i<result['openPorts'].length; i++) {
+                            portMap[result['openPorts'][i]['port']] = i;
                         }
-                        else {
-                            console.log("port not in last scan");
-                            result['openPorts'].push(host['openPorts'][i]);
+
+                        for(i=0; i<host['openPorts'].length; i++) {
+                            let portNum = host['openPorts'][i]['port'];
+                            if(portMap[portNum]) {
+                                result['openPorts'][portMap[portNum]]['history'].push( {
+                                    state: result['openPorts'][i]['state'],
+                                    start: result["openPorts"][i]['lastChanged']
+                                });
+                                result['openPorts'][portMap[portNum]]['state'] = 'up';
+                                result['openPorts'][portMap[portNum]]['lastChanged'] = new Date();
+
+                            }
+                            else {
+                                result['openPorts'].push(host['openPorts'][i]);
+                            }
                         }
-                        seenPorts[host['openPorts'][i]['port']] = true;
+
+
                     }
-                    for(var port in seenPorts) {
-                        console.log(port+":"+seenPorts[port]);
-                        
-                        if(seenPorts[port] == false) {
-                            console.log("port "+port+" missing from current scan");
-                            for(i = 0; i<result['openPorts'].length; i++) {
-                                if(result['openPorts'][i]['port'] == port) {
-                                    
-                                    result['openPorts'][i]["history"].push({
-                                        state: result['openPorts'][i]['state'],
-                                        start: result["openPorts"][i]['lastChanged']
-                                    });
-                                    result['openPorts'][i]['state'] = "closed";
-                                    result['openPorts'][i]["lastChanged"] = new Date();
-                                    console.log("setting state to closed");
-                                    break;
+                    else {
+                        seenPorts = {};
+                        for(i = 0; i<result['openPorts'].length; i++) {
+                            seenPorts[result['openPorts'][i]['port']] = false;
+                        }
+                        for(i = 0; i<host['openPorts'].length; i++) {
+                            if(host['openPorts'][i]['port'] in seenPorts) {
+                                console.log("port in last scan");
+                            }
+                            else {
+                                console.log("port not in last scan");
+                                result['openPorts'].push(host['openPorts'][i]);
+                            }
+                            seenPorts[host['openPorts'][i]['port']] = true;
+                        }
+                        for(var port in seenPorts) {
+                            console.log(port+":"+seenPorts[port]);
+                            
+                            if(seenPorts[port] == false) {
+                                console.log("port "+port+" missing from current scan");
+                                for(i = 0; i<result['openPorts'].length; i++) {
+                                    if(result['openPorts'][i]['port'] == port) {
+                                        
+                                        result['openPorts'][i]["history"].push({
+                                            state: result['openPorts'][i]['state'],
+                                            start: result["openPorts"][i]['lastChanged']
+                                        });
+                                        result['openPorts'][i]['state'] = "closed";
+                                        result['openPorts'][i]["lastChanged"] = new Date();
+                                        console.log("setting state to closed");
+                                        break;
+                                    }
                                 }
+                                
                             }
                             
                         }
-                        
                     }
+                    
                     result.save();
                 }
                 else {

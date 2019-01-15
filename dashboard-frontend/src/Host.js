@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 
 import Port from './Port';
 
-
-
 class Host extends Component{
 	createPort(port) {
 		return (<Port port={port.port} protocol={port.protocol} service={port.service} key={port._id}/>);
