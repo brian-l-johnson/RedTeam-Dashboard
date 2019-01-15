@@ -16,6 +16,9 @@ class Host extends Component{
 			<div className="hostContainer card">
 				<h5 className="card-title">{this.props.ip}</h5>
 				<h5 className="card-subtitle">{this.props.hostname}</h5>
+				{
+					(this.props.comments.length > 0) && <i className="fas fa-comment"></i>
+				}
 				
 				{this.createPorts(this.props.openPorts)}
 				{
