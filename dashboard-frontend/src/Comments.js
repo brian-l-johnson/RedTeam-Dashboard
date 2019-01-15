@@ -5,7 +5,8 @@ class Comments extends Component {
     submitComment = event => {
         event.preventDefault();
         let newComment = {};
-        newComment['text'] = document.getElementById('newComment').value;
+
+        newComment['text'] = event.target.newComment.value;
         newComment['user'] = 'me';
         //alert(JSON.stringify(newComment));
         fetch('http://127.0.0.1:3001/'+this.props.commentType+"/"+this.props.scope+"/comments", {
@@ -16,12 +17,13 @@ class Comments extends Component {
             body: JSON.stringify(newComment)
         })
         .then(response => response.json())
-        .then(document.getElementById('newComment').value = "");
+        .then(event.target.newComment.value = "");
     }
     
     render() {
 		return (
             <div className="commentsContainer">
+                 <form onSubmit={this.submitComment}>
                 <table className="table table-striped">
                     <thead>
                         <tr>
@@ -34,7 +36,7 @@ class Comments extends Component {
                         {
  
                         this.props.commentArray.map(comment => (
-                            <tr key={comment.id} > 
+                            <tr key={comment._id} > 
                                 <td>{comment.text}</td>
                                 <td>{comment.date}</td>
                                 <td>{comment.user}</td>
@@ -49,7 +51,7 @@ class Comments extends Component {
                         </tr>
                     </tbody>
                 </table>
-                <form onSubmit={this.submitComment}>
+               
                     <button type="submit" className="btn btn-primary">Submit</button>
                 </form>
             </div>

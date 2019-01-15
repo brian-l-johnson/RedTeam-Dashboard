@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import Port from './Port';
+import Comments from './Comments';
 
 class Host extends Component{
 	createPort(port) {
@@ -17,6 +18,9 @@ class Host extends Component{
 				<h5 className="card-subtitle">{this.props.hostname}</h5>
 				
 				{this.createPorts(this.props.openPorts)}
+				{
+					!this.props.summary && <Comments commentArray={this.props.comments} commentType="hosts" scope={this.props.ip} />
+				}
 			</div>
 		);
 	}

@@ -60,12 +60,12 @@ class Team extends Component{
 				<h1 className="card-title">Name: {this.state.team.name}</h1>
 				<h2 className="card-subtitle">Range: {this.state.team.range}</h2>
 				{
-					(this.state.summary && (this.state.team.comments.length > 0)) && <i className="fas fa-comment"></i>
+					(this.state.team.comments.length > 0) && <i className="fas fa-comment"></i>
 				}
 				<br/>
 				{
 					this.state.hosts.map(host => (
-							host.state === "up" && <Host hostname={host.hostname} ip={host.ip} openPorts={host.openPorts} key={host._id} />
+							host.state === "up" && <Host hostname={host.hostname} ip={host.ip} openPorts={host.openPorts} comments={host.comments} key={host._id} summary={this.state.summary}/>
 					))
 				}
 				{
