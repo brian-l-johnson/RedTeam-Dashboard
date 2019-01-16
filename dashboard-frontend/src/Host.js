@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
+
 
 import Port from './Port';
 import Comments from './Comments';
+import PortTable from './PortTable';
 
 class Host extends Component{
 	createPort(port) {
@@ -10,17 +13,23 @@ class Host extends Component{
 	createPorts(ports) {
 		return ports.map(this.createPort);
 	}
+	handleClick(ip, event) {
+		event.stopPropagation();
+		console.log(ip);
+	}
 
 	render() {
 		return (
-			<div className="hostContainer card">
+			<div className="hostContainer card" onClick={this.handleClick.bind(this, this.props.ip)}>
 				<h5 className="card-title">{this.props.ip}</h5>
 				<h5 className="card-subtitle">{this.props.hostname}</h5>
 				{
 					(this.props.comments.length > 0) && <i className="fas fa-comment"></i>
 				}
 				
-				{this.createPorts(this.props.openPorts)}
+				{
+					(this.props.openPorts.length > 0) && <PortTable openPorts={this.props.openPorts}/>
+				}
 				{
 					!this.props.summary && <Comments commentArray={this.props.comments} commentType="hosts" scope={this.props.ip} />
 				}
@@ -29,4 +38,4 @@ class Host extends Component{
 	}
 
 }
-export default Host;
+export default withRouter(Host);
