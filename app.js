@@ -8,6 +8,7 @@ var db = require('./db');
 var HostController = require('./HostController');
 var TeamController = require('./TeamController');
 var NmapController = require('./NmapController');
+var VulnerabilityController = require('./VulnerabilityController');
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -18,5 +19,6 @@ app.use(function(req, res, next) {
 app.use('/hosts', HostController);
 app.use('/teams', TeamController);
 app.use('/nmap', NmapController);
+app.use('/vulnerability', VulnerabilityController);
 
 module.exports = app;

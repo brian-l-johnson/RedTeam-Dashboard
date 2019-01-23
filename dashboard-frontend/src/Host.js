@@ -28,7 +28,7 @@ class Host extends Component{
 				}
 				
 				{
-					(this.props.openPorts.length > 0) && <PortTable openPorts={this.props.openPorts}/>
+					(this.props.openPorts.length > 0) && <PortTable openPorts={this.props.openPorts} ip={this.props.ip} summary={this.props.summary}/>
 				}
 				{
 					!this.props.summary && <Comments commentArray={this.props.comments} commentType="hosts" scope={this.props.ip} />

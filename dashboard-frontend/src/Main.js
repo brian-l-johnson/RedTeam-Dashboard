@@ -14,6 +14,7 @@ class Main extends Component {
                     <Route path='/Teams' component={Teams}/>
                     <Route path='/Team/:id' component={Team} />
                     <Route path='/Hosts' component={Hosts}/>
+                    <Route path='/Host/:ip' component={Hosts}/>
                     
                 </Switch>
             </div>
