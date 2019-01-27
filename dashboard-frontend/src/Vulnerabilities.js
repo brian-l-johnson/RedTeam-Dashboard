@@ -9,8 +9,9 @@ class Vulnerabilities extends Component {
         newVuln['severity'] = event.target.newSeverity.value;
         newVuln['user'] = "me";
 
-        fetch('http://127.0.0.1:3001/vulnerability/'+this.props.host+"/"+this.props.port, {
+        fetch(window.API_URL+'/vulnerability/'+this.props.host+"/"+this.props.port, {
             method: "POST",
+            credentials: 'include',
             headers: {
                 "Content-Type": "application/json"
             },

@@ -9,6 +9,17 @@ router.use(bodyParser.json());
 
 var Team = require('./schema/team');
 
+
+router.use(function(req, res, next) {
+	if(req.session.authenticated) {
+		next();
+	}
+	else{
+		console.log("user is not logged in, sending 401")
+		return res.status(401).send({"error": "not logged in"});	
+	}
+});
+
 router.post('/', function(req, res) {
 	console.log("in post handler")
 	console.log("ip is: "+ req.body.ip);
@@ -49,7 +60,6 @@ router.post('/:id/comments', function(req, res) {
 		team.save();
 		res.status(200).send(team);
 	});
-
 });
 
 module.exports = router;

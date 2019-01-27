@@ -8,8 +8,9 @@ class Comments extends Component {
         newComment['text'] = event.target.newComment.value;
         newComment['user'] = 'me';
         //alert(JSON.stringify(newComment));
-        fetch('http://127.0.0.1:3001/'+this.props.commentType+"/"+this.props.scope+"/comments", {
+        fetch(window.API_URL+'/'+this.props.commentType+"/"+this.props.scope+"/comments", {
             method: "POST",
+            credentials: 'include',
             headers: {
                 "Content-Type": "application/json"
             },

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 import Host from './Host';
 import Comments from './Comments';
@@ -26,13 +26,19 @@ class Team extends Component{
   	}
 
 	componentDidMount() {
-		this.teamInterval = setInterval(() => fetch('http://127.0.0.1:3001/teams/'+this.state.id)
-		.then(response => response.json())
+		this.teamInterval = setInterval(() => fetch(window.API_URL+'/teams/'+this.state.id, {credentials: 'include'})
+		.then(response => {
+			if(!response.ok) this.props.history.push('/Login');
+			else return response.json();
+		})
 		.then(data => this.setState({team: data})),5000);
 
 
-    	this.hostsInterval = setInterval(() => fetch('http://127.0.0.1:3001/hosts/team/'+this.state.id)
-      		.then(response => response.json())
+    	this.hostsInterval = setInterval(() => fetch(window.API_URL+'/hosts/team/'+this.state.id, {credentials: 'include'})
+      		.then(response => {
+                if(!response.ok) this.props.history.push('/Login');
+                else return response.json();
+            })
       		.then(data => this.setState({hosts: data})), 5000);
 	}
 	componentWillUnmount() {

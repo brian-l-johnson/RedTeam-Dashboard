@@ -26,7 +26,7 @@ class PortTable extends Component{
                                         <td>
                                             {
                                                 this.props.summary ? (
-                                                    (port.vulnerabilities.length > 0) && <i class="fas fa-bug"></i>
+                                                    (port.vulnerabilities.length > 0) && <i className="fas fa-bug"></i>
                                                 ) : (
                                                     <Vulnerabilities port={port.port} vulnerabilities={port.vulnerabilities} host={this.props.ip}/>
                                                 )

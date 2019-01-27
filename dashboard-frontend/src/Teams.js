@@ -12,8 +12,11 @@ class Teams extends Component {
     
       componentDidMount() {
           
-          this.interval = setInterval(() => fetch('http://127.0.0.1:3001/teams')
-            .then(response => response.json())
+          this.interval = setInterval(() => fetch(window.API_URL+'/teams', {credentials: 'include'})
+            .then(response => {
+                if(!response.ok) this.props.history.push('/Login');
+                else return response.json();
+            })
             .then(data => this.setState({teams: data})),1000);
             
       }
@@ -27,8 +30,9 @@ class Teams extends Component {
           newTeam['name'] = ntf.name.value;
           newTeam['range'] = ntf.range.value;
           alert("in handleSubmit:"+JSON.stringify(newTeam));
-          fetch('http://127.0.0.1:3001/teams', {
+          fetch(window.API_URL+'/teams', {
               method: "POST",
+              credentials: 'include',
               headers: {
                   "Content-Type": "application/json"
               },

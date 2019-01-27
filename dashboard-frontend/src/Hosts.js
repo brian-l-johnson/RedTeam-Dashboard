@@ -10,6 +10,11 @@ class Hosts extends Component {
             hosts: [],
             selectedHost: null
         }
+        /*
+        if(typeof(this.props.match.params.ip) !== 'undefined') {
+            this.state.selectedHost = this.props.match.params.ip;
+        }
+        */
       }
     
     componentDidMount() {

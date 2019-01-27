@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom'
-
+import { Link } from 'react-router-dom';
+import { checkPermissions} from './utils.js';
 import Team from './Team';
 
 class Dashboard extends Component {
@@ -9,12 +9,28 @@ class Dashboard extends Component {
         this.state = {
           "teams": [],
         }
+
       }
-    
+
       componentDidMount() {
+          console.log(window.API_URL);
+          console.log("here");
+          //this.checkPermissions();
+          checkPermissions("foo").then(
+            result => {
+              if(!result) {
+                this.props.history.push('/Login');
+              }
+            }
+          )
           
-          this.interval = setInterval(() => fetch('http://127.0.0.1:3001/teams')
-            .then(response => response.json())
+          this.interval = setInterval(() => fetch(window.API_URL+'/teams', {credentials: 'include'})
+            .then(response => {
+              if(!response.ok) {
+                this.props.history.push('/Login');
+              }
+              else return response.json()
+            })
             .then(data => this.setState({teams: data})),1000);
         
       }
