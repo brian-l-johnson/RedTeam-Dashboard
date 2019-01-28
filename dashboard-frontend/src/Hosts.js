@@ -28,7 +28,6 @@ class Hosts extends Component {
     }
 
     chooseHost = event => {
-        console.log(event.target.value);
         this.setState({selectedHost: event.target.value});
     }
     

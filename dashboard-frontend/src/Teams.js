@@ -29,7 +29,6 @@ class Teams extends Component {
           let ntf = document.getElementById("newTeamForm");
           newTeam['name'] = ntf.name.value;
           newTeam['range'] = ntf.range.value;
-          alert("in handleSubmit:"+JSON.stringify(newTeam));
           fetch(window.API_URL+'/teams', {
               method: "POST",
               credentials: 'include',
@@ -42,11 +41,9 @@ class Teams extends Component {
 
       }
       handleChange = event => {
-          console.log(event.target.name);
           this.setState({['newTeam'[event.target.name]]: event.target.value});
       }
       handleClick(teamName) {
-          console.log(teamName);
           this.props.history.push("/team/"+teamName);
       }
     

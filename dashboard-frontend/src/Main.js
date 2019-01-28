@@ -27,7 +27,6 @@ class Main extends Component {
     }
   
     requireAuth(nextState, replace) {
-        console.log(nextState);
         if (!this.loggedIn()) {
             replace({
                 pathname: '/Login'

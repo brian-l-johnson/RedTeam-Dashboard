@@ -14,7 +14,6 @@ class Header extends Component {
 	getUserInfo() {
 		fetch(window.API_URL+'/auth/permissions', {credentials: 'include'})
         .then(response => {
-			console.log(response.status);
             if(response.status === 401) {
               this.setState({loggedin: false});
 			}
@@ -25,7 +24,6 @@ class Header extends Component {
         })
         .then(permissions => {
 			this.setState({"permissions": permissions});
-			console.log(typeof(this.state.permissions));
         })
 	}
 
@@ -40,9 +38,6 @@ class Header extends Component {
 	  }
 	
 	  onRouteChanged() {
-		console.log("ROUTE CHANGED");
-		console.log(this.props.location.pathname);
-		console.log("login state:"+this.state.loggedin);
 		this.getUserInfo();
 	  }
 

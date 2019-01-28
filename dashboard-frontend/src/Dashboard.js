@@ -13,12 +13,8 @@ class Dashboard extends Component {
       }
 
       componentDidMount() {
-          console.log(window.API_URL);
-          console.log("here");
-          //this.checkPermissions();
           checkPermissions("view").then(
             result => {
-              console.log(result);
               if(!result) {
                 this.props.history.push('/Login');
               }

@@ -31,7 +31,6 @@ class Login extends Component{
 			}
 			else {
 				response.json().then(data => {
-					console.log(data);
 					this.setState({error: data.error});
 				});
 			}

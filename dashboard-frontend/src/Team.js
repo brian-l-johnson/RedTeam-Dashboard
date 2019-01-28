@@ -56,7 +56,6 @@ class Team extends Component{
   	}
 	
 	handleClick(teamName) {
-		console.log(teamName);
 		this.props.history.push("/team/"+teamName);
 	}
 
