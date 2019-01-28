@@ -6,7 +6,7 @@ class Header extends Component {
 	constructor(props) {
     	super(props);
     	this.state = {
-			permissions: [],
+			permissions: ['foo'],
 			loggedin: false
 		}
 	}
@@ -25,6 +25,7 @@ class Header extends Component {
         })
         .then(permissions => {
 			this.setState({"permissions": permissions});
+			console.log(typeof(this.state.permissions));
         })
 	}
 
@@ -53,17 +54,28 @@ class Header extends Component {
 					<span className="navbar-toggler-icon"></span>
 				</button>
 				<div className="collapse navbar-collapse" id="navbarNav">
-					<ul className="navbar-nav">
-						<li className="nav-item active">
-							<Link className="nav-link" to="/Teams">Teams</Link>
-						</li>
-						<li className="nav-item">
-							<Link className="nav-link" to="/Hosts">Hosts</Link>
-						</li>
-						<li className="navbar-nav">
-							<Link className="nav-link" to="/UserManagement">User Management</Link>
-						</li>
-					</ul>
+					
+					{
+						this.state.loggedin && (
+							<ul className="navbar-nav">
+								<li className="nav-item active">
+									<Link className="nav-link" to="/Teams">Teams</Link>
+								</li>
+								<li className="nav-item">
+									<Link className="nav-link" to="/Hosts">Hosts</Link>
+								</li>
+								{
+									((typeof(this.state.permissions.indexOf) === "function") && (this.state.permissions.indexOf('admin') > -1)) && (
+										<li className="navbar-nav">
+											<Link className="nav-link" to="/UserManagement">User Management</Link>
+										</li>
+									)
+								}
+		
+						</ul>
+						) 
+					}
+
 					{
 						this.state.loggedin===false ? (
 							<ul className="navbar-nav ml-auto">

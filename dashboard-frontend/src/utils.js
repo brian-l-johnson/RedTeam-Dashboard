@@ -23,3 +23,18 @@ export function checkPermissions(requiredPermission) {
     return promise;
 
   }
+
+  export function sortHosts(hostArray) {
+    return hostArray.sort(function(a, b) {
+        let ipa = a.ip.split('.');
+        let ipb = b.ip.split('.');
+        for(var i = 0; i<ipa.length; i++) {
+            if((ipa[i] = parseInt(ipa[i])) < (ipb[i] = parseInt(ipb[i]))) {
+                return -1;}
+            else if (ipa[i] > ipb[i]) {
+                return 1;
+            }
+        }
+        return 0;
+    });
+}

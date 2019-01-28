@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 
+import { sortHosts } from './utils';
 import Host from './Host';
 import Comments from './Comments';
 
@@ -70,7 +71,7 @@ class Team extends Component{
 				}
 				<br/>
 				{
-					this.state.hosts.map(host => (
+					sortHosts(this.state.hosts).map(host => (
 							host.state === "up" && <Host hostname={host.hostname} ip={host.ip} openPorts={host.openPorts} comments={host.comments} key={host._id} summary={this.state.summary}/>
 					))
 				}
