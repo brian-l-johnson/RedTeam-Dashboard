@@ -6,6 +6,7 @@ import Team from './Team';
 import Hosts from './Hosts';
 import Register from './Register';
 import Login from './Login';
+import UserManagement from './UserManagement';
 
 class Main extends Component {
     constructor(props) {
@@ -47,6 +48,8 @@ class Main extends Component {
 
                     <Route path='/Register' component={Register}/>
                     <Route path='/Login' component={Login}/>
+
+                    <Route path="/UserManagement" component={UserManagement}/>
                     
                 </Switch>
             </div>

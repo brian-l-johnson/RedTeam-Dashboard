@@ -7,7 +7,7 @@ class Register extends Component{
 		let register = {};
 		let rf = document.getElementById("registerForm");
 		register['email'] = rf.email.value;
-		register['handle'] = rf.name.value;
+		register['handle'] = rf.handle.value;
 		register['password'] = rf.password.value;
 		alert("in handleSubmit:"+JSON.stringify(register));
 		fetch(window.API_URL+'/auth/register', {

@@ -4,6 +4,7 @@ var express = require('express');
 var app = express();
 var db = require('./db');
 
+require('dotenv').config();
 
 var HostController = require('./HostController');
 var TeamController = require('./TeamController');
@@ -24,6 +25,7 @@ app.use(session({
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "http://127.0.0.1:3000");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT");
   res.header("Access-Control-Allow-Credentials", "true");
   next();
 });

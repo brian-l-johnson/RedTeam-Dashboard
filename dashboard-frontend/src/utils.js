@@ -3,13 +3,22 @@ export function checkPermissions(requiredPermission) {
         console.log("checking if logged in");
         fetch(window.API_URL+'/auth/permissions', {credentials: 'include'})
         .then(response => {
-            if(!response.ok) {
+            if(response.status === '401') {
               resolve(false);
             }
             console.log("logged in");
-            resolve(true);
+            return response.json();
         },
         error => reject(error))
+        .then(permissions => {
+            console.log(permissions);
+            if(permissions.indexOf(requiredPermission) > -1) {
+                resolve(true);
+            }
+            else {
+                resolve(false);
+            }
+        })
     }) 
     return promise;
 

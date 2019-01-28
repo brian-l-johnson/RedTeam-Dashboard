@@ -11,14 +11,13 @@ router.use(bodyParser.urlencoded({extended: true}));
 router.use(bodyParser.json());
 var User = require('./schema/User');
 
-router.get('/permissions', function(req, res) {
-	if(req.session.authenticated) {
-		return res.status(200).send(req.session.user.permissions);
-	}
-	return res.status(401).send({error: "not logged in"});
+var authMiddleware = require('./authMiddleware');
+
+router.get('/permissions', authMiddleware.isAuthenticated(), function(req, res) {
+	return res.status(200).send(req.session.user.permissions);
 });
 
-router.get('/users', function(req, res) {
+router.get('/users', authMiddleware.isAuthenticated(), authMiddleware.hasRole("admin"), function(req, res) {
 	if(req.session.authenticated) {
 		User.find({}, function(err, users) {
 			if(err) return res.status(500).send({error: "unable to retrieve users"});
@@ -36,6 +35,13 @@ router.get('/users', function(req, res) {
 	
 });
 
+router.put('/user/:id', authMiddleware.isAuthenticated(), authMiddleware.hasRole('admin'), function(req, res) {
+	User.findByIdAndUpdate(req.params.id, req.body, {new: true}, function(err, user) {
+		if(err) return res.status(500).send({"error": "could not update user"});
+		else return res.status(200).send({"status": "updated user"});
+	})
+});
+
 router.post('/register', function(req, res) {
 	User.find({email: req.body.email}, function(err, docs) {
 		if(err) res.status(500).send({"error": "database error"});
@@ -49,7 +55,7 @@ router.post('/register', function(req, res) {
 			User.create({
 				email: req.body.email, 
 				password: hash,
-				name: req.body.name
+				handle: req.body.handle
 			},
 			function(err, user){
 				if(err) {

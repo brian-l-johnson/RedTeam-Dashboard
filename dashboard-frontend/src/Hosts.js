@@ -18,7 +18,7 @@ class Hosts extends Component {
       }
     
     componentDidMount() {
-        this.interval = setInterval(() => fetch('http://127.0.0.1:3001/hosts')
+        this.interval = setInterval(() => fetch('http://127.0.0.1:3001/hosts', {credentials: 'include'})
           .then(response => response.json())
           .then(data => this.setState({hosts: data})),1000);
           

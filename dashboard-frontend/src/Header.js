@@ -1,7 +1,50 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
+import { withRouter } from 'react-router-dom';
 
 class Header extends Component {
+	constructor(props) {
+    	super(props);
+    	this.state = {
+			permissions: [],
+			loggedin: false
+		}
+	}
+
+	getUserInfo() {
+		fetch(window.API_URL+'/auth/permissions', {credentials: 'include'})
+        .then(response => {
+			console.log(response.status);
+            if(response.status === 401) {
+              this.setState({loggedin: false});
+			}
+			else{
+				this.setState({loggedin: true});
+			}
+            return response.json();
+        })
+        .then(permissions => {
+			this.setState({"permissions": permissions});
+        })
+	}
+
+	componentDidMount() {
+		this.getUserInfo();
+	}
+
+	componentDidUpdate(prevProps) {
+		if (this.props.location !== prevProps.location) {
+		  this.onRouteChanged();
+		}
+	  }
+	
+	  onRouteChanged() {
+		console.log("ROUTE CHANGED");
+		console.log(this.props.location.pathname);
+		console.log("login state:"+this.state.loggedin);
+		this.getUserInfo();
+	  }
+
 	render() {
 		return (
 			<nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
@@ -17,15 +60,31 @@ class Header extends Component {
 						<li className="nav-item">
 							<Link className="nav-link" to="/Hosts">Hosts</Link>
 						</li>
-					</ul>
-					<ul className="navbar-nav ml-auto">
-						<li className="nav-item">
-							<Link className="nav-link" to="/Register">Register</Link>
-						</li>
-						<li className="nav-item">
-							<Link className="nav-link" to="/Login">Login</Link>
+						<li className="navbar-nav">
+							<Link className="nav-link" to="/UserManagement">User Management</Link>
 						</li>
 					</ul>
+					{
+						this.state.loggedin===false ? (
+							<ul className="navbar-nav ml-auto">
+							<li className="nav-item">
+								<Link className="nav-link" to="/Register">Register</Link>
+							</li>
+							<li className="nav-item">
+								<Link className="nav-link" to="/Login">Login {this.state.loggedin}</Link>
+							</li>
+							
+						</ul>
+						) : (
+							<ul className="navbar-nav ml-auto">
+								<li className="nav-item">
+									<Link className="nav-link" to="/Logout">Logout</Link>
+								</li>
+								{this.state.loggedin}
+							</ul>
+						)
+					}
+				
 				</div>
 
 			</nav>
@@ -33,4 +92,4 @@ class Header extends Component {
 	}
 }
 
-export default Header;
+export default withRouter(Header);

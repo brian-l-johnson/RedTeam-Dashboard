@@ -47,7 +47,7 @@ class Login extends Component{
 				</div>
 				<div className="card-body">
 					{
-						(this.state.error != "") && <Error message={this.state.error} />
+						(this.state.error !== "") && <Error message={this.state.error} />
 					}
 					<form onSubmit={this.handleSubmit} id="registerForm">
 						<div className="form-group">

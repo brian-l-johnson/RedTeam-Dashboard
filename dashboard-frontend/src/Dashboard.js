@@ -16,8 +16,9 @@ class Dashboard extends Component {
           console.log(window.API_URL);
           console.log("here");
           //this.checkPermissions();
-          checkPermissions("foo").then(
+          checkPermissions("view").then(
             result => {
+              console.log(result);
               if(!result) {
                 this.props.history.push('/Login');
               }
