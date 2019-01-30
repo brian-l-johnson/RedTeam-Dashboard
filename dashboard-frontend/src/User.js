@@ -12,8 +12,8 @@ class User extends Component{
 				"Content-Type": "application/json"
 			},
 			body: JSON.stringify(update)
-		}).
-		then(response => {
+		})
+		.then(response => {
 			response.json()
 		})
 	}
@@ -38,8 +38,8 @@ class User extends Component{
 				"Content-Type": "application/json"
 			},
 			body: JSON.stringify({"permissions": permissions})
-		}).
-		then(response => {
+		})
+		.then(response => {
 			response.json()
 		})
 	}

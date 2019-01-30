@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { checkPermissions} from './utils.js';
 import Team from './Team';
 

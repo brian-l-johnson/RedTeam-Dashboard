@@ -12,22 +12,24 @@ class Login extends Component{
 
 	handleSubmit = event => {
 		event.preventDefault();
-		let register = {};
-		let rf = document.getElementById("registerForm");
-		register['email'] = rf.email.value;
-		register['password'] = rf.password.value;
-		alert("in handleSubmit:"+JSON.stringify(register));
+		let login = {};
+		let rf = document.getElementById("loginForm");
+		login['email'] = rf.email.value;
+		login['password'] = rf.password.value;
 		fetch(window.API_URL+'/auth/login', {
 			method: "POST",
 			credentials: 'include',
 			headers: {
 				"Content-Type": "application/json"
 			},
-			body: JSON.stringify(register)
+			body: JSON.stringify(login)
 		})
 		.then(response => {
 			if(response.status === 200) {
 				this.props.history.push('/');
+				response.json().then(data => {
+					window.user = data.user;
+				})
 			}
 			else {
 				response.json().then(data => {
@@ -48,7 +50,7 @@ class Login extends Component{
 					{
 						(this.state.error !== "") && <Error message={this.state.error} />
 					}
-					<form onSubmit={this.handleSubmit} id="registerForm">
+					<form onSubmit={this.handleSubmit} id="loginForm">
 						<div className="form-group">
 							<label htmlFor="email">Email Address</label>
 							<input type="email" className="form-control" id="email" placeholder="Enter email..."/>

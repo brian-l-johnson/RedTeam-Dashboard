@@ -51,7 +51,7 @@ router.post('/:ip/comments', authMiddleware.isAuthenticated(), authMiddleware.ha
 		if(err) return res.status(300).send("There was a problem finding the host");
 		if(!host) return res.status(404).send("no team found");
 		host.comments.push({text: req.body.text,
-							user: req.body.user });
+							user: req.session.user.handle });
 		host.save();
 		res.status(200).send(host);
 	});

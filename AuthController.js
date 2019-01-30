@@ -17,6 +17,16 @@ router.get('/permissions', authMiddleware.isAuthenticated(), function(req, res) 
 	return res.status(200).send(req.session.user.permissions);
 });
 
+router.get('/logout', function(req, res) {
+	req.session.regenerate(function(err) {
+		if(err) return res.status(500).send({error: "failed to destroy session"});
+		req.session.user = null;
+		req.session.authenticated = false;
+		console.log("logging out");
+		return(res.status(200).send({"status": "logged out"}));
+	})
+});
+
 router.get('/users', authMiddleware.isAuthenticated(), authMiddleware.hasRole("admin"), function(req, res) {
 	if(req.session.authenticated) {
 		User.find({}, function(err, users) {
@@ -82,7 +92,8 @@ router.post('/login', function(req, res) {
 					if(err) return res.status(500).send({"error": "failed to regenerate session"});
 					req.session.user = user;
 					req.session.authenticated = true;
-					return res.status(200).send({"status": "logged it"});
+					return res.status(200).send({"status": "logged in1",
+												  "user": user.handle});
 				})
 				
 			}

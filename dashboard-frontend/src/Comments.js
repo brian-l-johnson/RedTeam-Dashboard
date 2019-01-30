@@ -6,7 +6,6 @@ class Comments extends Component {
         let newComment = {};
 
         newComment['text'] = event.target.newComment.value;
-        newComment['user'] = 'me';
         //alert(JSON.stringify(newComment));
         fetch(window.API_URL+'/'+this.props.commentType+"/"+this.props.scope+"/comments", {
             method: "POST",

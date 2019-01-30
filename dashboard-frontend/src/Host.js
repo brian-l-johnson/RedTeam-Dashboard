@@ -15,7 +15,7 @@ class Host extends Component{
 	}
 	handleClick(ip, event) {
 		event.stopPropagation();
-		this.props.history.push("/Host/"+ip);
+		//this.props.history.push("/Host/"+ip);
 	}
 
 	render() {

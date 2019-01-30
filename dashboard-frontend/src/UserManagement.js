@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Error from './Error';
 import { checkPermissions} from './utils.js';
 import User from './User';
 

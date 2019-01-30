@@ -74,20 +74,21 @@ class Header extends Component {
 					{
 						this.state.loggedin===false ? (
 							<ul className="navbar-nav ml-auto">
-							<li className="nav-item">
-								<Link className="nav-link" to="/Register">Register</Link>
-							</li>
-							<li className="nav-item">
-								<Link className="nav-link" to="/Login">Login {this.state.loggedin}</Link>
-							</li>
-							
-						</ul>
+								<li className="nav-item">
+									<Link className="nav-link" to="/Register">Register</Link>
+								</li>
+								<li className="nav-item">
+									<Link className="nav-link" to="/Login">Login {this.state.loggedin}</Link>
+								</li>
+							</ul>
 						) : (
 							<ul className="navbar-nav ml-auto">
+								<li>
+									{window.user}
+								</li>
 								<li className="nav-item">
 									<Link className="nav-link" to="/Logout">Logout</Link>
 								</li>
-								{this.state.loggedin}
 							</ul>
 						)
 					}

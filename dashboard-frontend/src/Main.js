@@ -6,6 +6,7 @@ import Team from './Team';
 import Hosts from './Hosts';
 import Register from './Register';
 import Login from './Login';
+import Logout from './Logout';
 import UserManagement from './UserManagement';
 
 class Main extends Component {
@@ -47,6 +48,7 @@ class Main extends Component {
 
                     <Route path='/Register' component={Register}/>
                     <Route path='/Login' component={Login}/>
+                    <Route path='/Logout' component={Logout}/>
 
                     <Route path="/UserManagement" component={UserManagement}/>
                     
