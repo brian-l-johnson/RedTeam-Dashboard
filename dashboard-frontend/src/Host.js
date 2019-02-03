@@ -17,22 +17,28 @@ class Host extends Component{
 		event.stopPropagation();
 		//this.props.history.push("/Host/"+ip);
 	}
+	componentDidCatch(error, info) {
+		// You can also log the error to an error reporting service
+		console.log(error, info);
+	  }
 
 	render() {
 		return (
 			<div className="hostContainer card" onClick={this.handleClick.bind(this, this.props.ip)}>
 				<h5 className="card-title">{this.props.ip}</h5>
 				<h5 className="card-subtitle">{this.props.hostname}</h5>
-				{
-					(this.props.comments.length > 0) && <i className="fas fa-comment"></i>
-				}
+				<div className="card-body">
+					{
+						((this.props.comments !== null) && this.props.comments.length > 0) && <i className="fas fa-comment"></i>
+					}
+					{
+						(this.props.openPorts.length > 0) && <PortTable openPorts={this.props.openPorts} ip={this.props.ip} summary={this.props.summary}/>
+					}
+					{
+						!this.props.summary && <Comments commentArray={this.props.comments} commentType="hosts" scope={this.props.ip} />
+					}
+				</div>
 				
-				{
-					(this.props.openPorts.length > 0) && <PortTable openPorts={this.props.openPorts} ip={this.props.ip} summary={this.props.summary}/>
-				}
-				{
-					!this.props.summary && <Comments commentArray={this.props.comments} commentType="hosts" scope={this.props.ip} />
-				}
 			</div>
 		);
 	}

@@ -5,6 +5,9 @@
   "main": "index.js",
   "dependencies": {
     "@slack/client": "^4.8.0",
+    "amqplib": "^0.5.3",
+    "axios": "^0.18.0",
+    "axios-cookiejar-support": "^0.4.2",
     "bcrypt": "^3.0.3",
     "body-parser": "^1.18.3",
     "dotenv": "^6.2.0",
@@ -19,7 +22,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --ignore './sessions/' server.js"
+    "start": "nodemon --ignore './sessions/' --ignore './dashboard-frontend' server.js"
   },
   "author": "",
   "license": "ISC"

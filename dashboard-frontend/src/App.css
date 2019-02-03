@@ -35,6 +35,16 @@
 .hostContainer {
   margin: 3px;
   background-color: #f8f9fa;
+  margin-bottom: 20pt
+}
+
+.closed {
+  text-decoration: line-through;
+}
+
+.hacked {
+  color: red;
+  font-weight: bold;
 }
 
 @keyframes App-logo-spin {
