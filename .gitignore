@@ -65,3 +65,6 @@ typings/
 
 #session directecory
 sessions/
+
+#build directory
+build/
