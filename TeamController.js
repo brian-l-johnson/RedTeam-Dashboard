@@ -9,6 +9,9 @@ var authMiddleware = require('./authMiddleware.js');
 router.use(bodyParser.urlencoded({extended: true}));
 router.use(bodyParser.json());
 
+var EventPublisher = require('./EventPublisher');
+const publisher = new EventPublisher();
+
 var Team = require('./schema/team');
 
 /*
@@ -35,6 +38,7 @@ router.post('/', authMiddleware.isAuthenticated(), authMiddleware.hasRole("hacke
 			console.log(err);
 			return res.status(500).send("There was a problem adding the information to the database");
 		}
+		publisher.handleEvent("new team", JSON.stringify({"team": team._id, "name": team.name, "range": team.range}));
 		res.status(200).send(team);
 	});
 });

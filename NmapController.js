@@ -21,6 +21,7 @@ var Team = mongoose.model("Team");
 router.post('/:team', authMiddleware.isAuthenticated(), authMiddleware.hasRole("hacker"), function(req, res) {
     var team = req.params.team;
     var teamName;
+    var teamRange;
     console.log("in post handler")
     var nmapData = req.body;
     var seenHosts = {};
@@ -30,6 +31,8 @@ router.post('/:team', authMiddleware.isAuthenticated(), authMiddleware.hasRole("
         if(err) return console.log("failed to find team");
         if(!team) return res.status(404).send({error: "team not found"});
         this.teamName = t.name;
+        this.teamRange = t.range;
+        console.log(this.teamRange);
 
     })
     .then(function() {
@@ -60,16 +63,21 @@ router.post('/:team', authMiddleware.isAuthenticated(), authMiddleware.hasRole("
                             if(host['openPorts'] !== null) {
                                 for(i=0; i<host['openPorts'].length; i++) {
                                     let portNum = host['openPorts'][i]['port'];
-                                    if(portMap[portNum]) {
+                                    console.log(portNum);
+                                    if(portNum in portMap) {
+                                        console.log("found port");
+                                        publisher.handleEvent("port reopened", {"team": this.teamName, "ip": host.ip, "port": portNum});
                                         result['openPorts'][portMap[portNum]]['history'].push( {
                                             state: result['openPorts'][i]['state'],
                                             start: result["openPorts"][i]['lastChanged']
                                         });
                                         result['openPorts'][portMap[portNum]]['state'] = 'open';
                                         result['openPorts'][portMap[portNum]]['lastChanged'] = new Date();
-        
+                                        console.log("here");
                                     }
                                     else {
+                                        console.log("did not find port");
+                                        console.log(portMap);
                                         result['openPorts'].push(host['openPorts'][i]);
                                     }
                                 }
@@ -79,7 +87,10 @@ router.post('/:team', authMiddleware.isAuthenticated(), authMiddleware.hasRole("
                             seenPorts = {};
                             if(result['openPorts'] !== null) {
                                 for(i = 0; i<result['openPorts'].length; i++) {
-                                    seenPorts[result['openPorts'][i]['port']] = false;
+                                    if(result['openPorts'][i]['state'] === "open") {
+                                        seenPorts[result['openPorts'][i]['port']] = false;
+                                    }
+                                    
                                 }
                             }
                             if(host['openPorts'] !== null) {
@@ -89,6 +100,8 @@ router.post('/:team', authMiddleware.isAuthenticated(), authMiddleware.hasRole("
                                         
                                         if(result['openPorts'][portMap[host['openPorts'][i]["port"]]].state == "closed") {
                                             console.log("port reopend");
+                                            publisher.handleEvent("port reopened", {"team": this.teamName, "ip": host['ip'], "port": host['openPorts'][i]['port']});
+
                                             result['openPorts'][portMap[host['openPorts'][i]["port"]]]['history'].push({
                                                 state: result['openPorts'][portMap[host['openPorts'][i]["port"]]]['state'],
                                                 start: result['openPorts'][portMap[host['openPorts'][i]["port"]]]['lastChanged']
@@ -101,6 +114,7 @@ router.post('/:team', authMiddleware.isAuthenticated(), authMiddleware.hasRole("
                                     else {
                                         console.log("port not in last scan");
                                         result['openPorts'].push(host['openPorts'][i]);
+                                        publisher.handleEvent("new port", {"team": this.teamName, "ip": host.ip, "port": host.openPorts[i].port});
                                     }
                                     seenPorts[host['openPorts'][i]['port']] = true;
                                 }
@@ -120,6 +134,7 @@ router.post('/:team', authMiddleware.isAuthenticated(), authMiddleware.hasRole("
                                             result['openPorts'][i]['state'] = "closed";
                                             result['openPorts'][i]["lastChanged"] = new Date();
                                             console.log("setting state to closed");
+                                            publisher.handleEvent("port closed", {"team": this.teamName, "ip": host['ip'], "port": port});
                                             break;
                                         }
                                     }   
@@ -137,6 +152,9 @@ router.post('/:team', authMiddleware.isAuthenticated(), authMiddleware.hasRole("
                         if(newHost['openPorts'] === null) {
                             newHost['openPorts'] = [];
                         }
+                        for(var i = 0; i < newHost['openPorts'].length; i++) {
+                            publisher.handleEvent("new port", {"team": this.teamName, "ip": host.ip, "port": newHost['openPorts'][i].port});
+                        }
                         newHost.save(function(err) {
                             if(err) throw err;
                             console.log("saved host");
@@ -150,6 +168,7 @@ router.post('/:team', authMiddleware.isAuthenticated(), authMiddleware.hasRole("
                 async.each(Object.keys(seenHosts), function(hostIP, callback2) {
                     if(seenHosts[hostIP] == false) {
                         console.log(hostIP+" missing from current scan");
+                        publisher.handleEvent("host down", {"team": this.teamName, "ip": hostIP});
                         Host.findOne({ip: hostIP}, function(err, host) {
                             host['state'] = "down";
                             if(host['openPorts'] !== null) {
@@ -186,10 +205,11 @@ router.post('/:team', authMiddleware.isAuthenticated(), authMiddleware.hasRole("
         res.status(200).send({status: "ok"});
 
         msg = {team: req.params.team,
-            range: t.range};
+            range: this.teamRange};
         console.log(JSON.stringify({team: req.params.team,
-            range: t.range}));
-        publisher.publishMessage(JSON.stringify(msg));
+            range: this.teamRange}));
+        publisher.handleEvent("scan complete", JSON.stringify(msg));
+        //publisher.publishMessage(JSON.stringify(msg));
     });
 
 

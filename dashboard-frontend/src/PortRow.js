@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Vulnerabilities from './Vulnerabilities';
+import HistoryModal from './HistoryModal';
 
 class PortTable extends Component{
     constructor(props) {
@@ -23,7 +24,7 @@ class PortTable extends Component{
 	render() {
 		return (
             <tr key={this.props.port._id} className={[this.props.port.state, this.state.hacked?("hacked"):("clean")].join(' ')}>
-                <td>{this.props.port.port}/{this.props.port.protocol}</td>
+                <td>{this.props.port.port}/{this.props.port.protocol} {(this.props.port.history.length > 0) && <HistoryModal history={this.props.port.history} />}</td>
                 <td>{this.props.port.service}</td>
                 <td>
                     {
@@ -32,10 +33,6 @@ class PortTable extends Component{
                         ) : (
                             <Vulnerabilities port={this.props.port.port} vulnerabilities={this.props.port.vulnerabilities} host={this.props.ip}/>
                         )
-                    }
-                    {
-                        this.props.summary && (this.props.port.history.length > 0) && <i className="fas fa-history"></i>
-                        
                     }
                 </td>
             </tr>

@@ -1,7 +1,11 @@
 //app.js
 
 var express = require('express');
+var compression = require('compression');
+
 var app = express();
+const path = require('path');
+
 var db = require('./db');
 
 require('dotenv').config();
@@ -21,6 +25,15 @@ app.use(session({
   resave: true,
   store: new FileStore()
 }));
+
+app.use(compression()); 
+
+app.use(express.static(path.join(__dirname, 'build')));
+
+app.get('/', function(req, res) {
+  console.log("in static handler");
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "http://127.0.0.1:3000");

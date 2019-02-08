@@ -64,7 +64,7 @@ class Vulnerabilities extends Component {
                                             <input className="form-check-input" type="checkbox" checked={vuln.detected} name="detected" value={vuln._id} onChange={this.toggleDetected}/>
                                         </td>
                                         <td>
-                                            <input className="form-check-input" type="checkbox" checked={vuln.current} name="current" value={vuln._id} onChange={this.toggleDetected}/>
+                                            <input className="form-check-input" type="checkbox" checked={vuln.current} name="current" value={vuln._id} onChange={this.toggleCurrent}/>
                                         </td>
                                         <td>{vuln.user}</td>
                                     </tr>

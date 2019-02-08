@@ -18,7 +18,7 @@ doWebAuth().then(function(data) {
     console.log("got "+data);
 });
 
-amqp.connect('amqp://localhost:32777', function(err, conn) {
+amqp.connect('amqp://localhost:32771', function(err, conn) {
     conn.createChannel(function(err, ch) {
         var q = 'nmap-scan';
 
@@ -35,11 +35,11 @@ amqp.connect('amqp://localhost:32777', function(err, conn) {
             console.log(msgJson.team);
             console.log(msgJson.range);
 
-            var nmapscan = new nmap.NmapScan('10.0.1.1-5', '-sV -O');
+            var nmapscan = new nmap.NmapScan(msgJson.range, '');
 
             nmapscan.on('complete', function(data) {
                 console.log(JSON.stringify(data));
-                axios.post('http://127.0.0.1:3001/nmap/5c53c08097a7a036dcc73164', data)
+                axios.post('http://127.0.0.1:3001/nmap/'+msgJson.team, data)
                 .then(function(resp) {
                     console.log(resp.data);
                     ch.ack(msg);

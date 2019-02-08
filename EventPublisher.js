@@ -16,25 +16,34 @@ module.exports = class EventPublisher {
                 break;
             case "host down":
                 console.log(type+":"+message);
+                this.sendSlackMessage("host "+message.ip+" down for teams: "+message.team);
                 break;
             case "host up":
                 console.log(type+":"+message);
                 break;
             case "new port":
                 console.log(type+":"+message);
+                this.sendSlackMessage("port "+message.port+" opened for team: "+message.team+" on "+message.ip);
                 break;
-            case "port down":
+            case "port closed":
                 console.log(type+":"+message);
+                this.sendSlackMessage("port "+message.port+" closed for team: "+message.team+" on "+message.ip);
                 break;
-            case "port up":
+            case "port reopened":
                 console.log(type+":"+message);
+                this.sendSlackMessage("port "+message.port+" reopened for team: "+message.team+" on "+message.ip);
                 break;
             case "port down":
                 console.log(type+":"+message);
                 break;
             case "scan complete":
                 console.log(type+":"+message);
+                this.sendSlackMessage("nmap scan complete against team "+message.team);
+                this.publishMessage(message);
                 break;
+            case "new team":
+                console.log(type+":"+message);
+                this.publishMessage(message);
             case "exploit":
                 console.log(type+":"+message);
                 break
@@ -47,14 +56,14 @@ module.exports = class EventPublisher {
                 console.log("Error:", err);
             }
             else {
-                console.log("message seng");
+                console.log("message sent");
             }
         }
         )
     }
 
     publishMessage(msg) {
-        amqp.connect('amqp://localhost:32777', function(err, conn) {
+        amqp.connect(process.env.RABBIT_STRING, function(err, conn) {
             if(err) {
                 console.log(err);
             }
