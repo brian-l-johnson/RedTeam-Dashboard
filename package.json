@@ -15,6 +15,7 @@
     "express": "^4.16.4",
     "express-session": "^1.15.6",
     "mongoose": "^5.3.12",
+    "msfrpc": "^1.0.2",
     "node-nmap": "^4.0.0",
     "session-file-store": "^1.2.0"
   },
