@@ -9,12 +9,15 @@ export function checkPermissions(requiredPermission) {
         },
         error => reject(error))
         .then(permissions => {
-            if(permissions.indexOf(requiredPermission) > -1) {
-                resolve(true);
+            if(permissions) {
+                if(permissions.indexOf(requiredPermission) > -1) {
+                    resolve(true);
+                }
+                else {
+                    resolve(false);
+                }
             }
-            else {
-                resolve(false);
-            }
+
         })
     }) 
     return promise;

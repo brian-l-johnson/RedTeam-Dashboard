@@ -6,6 +6,10 @@ const axios = require('axios').default;
 const axiosCookieJarSupport = require('axios-cookiejar-support').default;
 const tough = require('tough-cookie');
 
+
+require('dotenv').config();
+
+
 var sync = require('child_process').spawnSync;
 
 const ipBlackList = ['10.0.0.0',
@@ -28,7 +32,7 @@ doWebAuth().then(function(data) {
 });
 */
 
-amqp.connect('amqp://scanner:Sc4nn3r-r4bb1t@dashboard.subversiveresearch.org:5672', function(err, conn) {
+amqp.connect('amqp://127.0.0.1:5672', function(err, conn) {
     conn.createChannel(function(err, ch) {
         var q = 'nmap-scan';
 
@@ -38,8 +42,8 @@ amqp.connect('amqp://scanner:Sc4nn3r-r4bb1t@dashboard.subversiveresearch.org:567
         ch.consume(q, function(msg) {
             //var secs = msg.content.toString().split('.').length - 1;
             //console.log(msg);
-            ip = randomIP();
-            sync('ifconfig', ['eth0:0', ip]);
+            //ip = randomIP();
+            //sync('ifconfig', ['eth0:0', ip]);
             console.log(" [x] Received %s", msg.content.toString());
 
             msgJson = JSON.parse(msg.content.toString());
@@ -47,19 +51,19 @@ amqp.connect('amqp://scanner:Sc4nn3r-r4bb1t@dashboard.subversiveresearch.org:567
             console.log(msgJson.team);
             console.log(msgJson.range);
 
-            var nmapscan = new nmap.NmapScan(msgJson.range, '-e eth0 -S '+ip);
+            var nmapscan = new nmap.NmapScan(msgJson.range)//, '-e eth0 -S '+ip);
 
             nmapscan.on('complete', function(data) {
                 console.log(JSON.stringify(data));
-                axios.get('https://dashboard.subversiveresearch.org/auth/permissions')
+                axios.get(process.env.DASHBOARD_URL+'/auth/permissions')
                 .then(function(resp) {
                     console.log(resp.status)
                 })
                 .catch(function(error) {
                     console.log("in catch, trying to login");
-                    const loginReq = axios.post('https://dashboard.subversiveresearch.org/auth/login', {
-                        "email": "brian.l.johnson@gmail.com",
-                        "password": "foobar"
+                    const loginReq = axios.post(process.env.DASHBOARD_URL+'/auth/login', {
+                        "email": process.env.DASHBOARD_USER,
+                        "password": process.env.DASHBOARD_PASS
                     });
                     loginReq
                     .then(function(response) {
@@ -75,7 +79,7 @@ amqp.connect('amqp://scanner:Sc4nn3r-r4bb1t@dashboard.subversiveresearch.org:567
                 })
                 .then(function() {
                     console.log("about to post results");
-                    axios.post('https://dashboard.subversiveresearch.org/nmap/'+msgJson.team, data)
+                    axios.post(process.env.DASHBOARD_URL+'/nmap/'+msgJson.team, data)
                     .then(function(resp) {
                         console.log(resp.data);
                         if(resp.status === 200) {
@@ -87,7 +91,7 @@ amqp.connect('amqp://scanner:Sc4nn3r-r4bb1t@dashboard.subversiveresearch.org:567
                         
                     })
                     .catch(function(error) {
-                        //console.log(error);
+                        console.log(error);
                         console.log("failed tp upload scan results");
                         process.exit(1);
                     })
@@ -114,16 +118,16 @@ function randomIP() {
 
 
 function doWebAuth() {
-        const request = axios.post('https://dashboard.subversiveresearch.org/auth/login', {
-            "email": "brian.l.johnson@gmail.com",
-            "password": "foobar"
+        const request = axios.post(process.env.DASHBOARD_URL+'/auth/login', {
+            "email": process.env.DASHBOARD_USER,
+            "password": process.env.DASHBOARD_PASS
         });
 
         request
         .then(function(response) {
             console.log(response.data);
             console.log(cookieJar);
-            axios.get('https://dashboard.subversiveresearch.org/auth/permissions')
+            axios.get(process.env.DASHBOARD_URL+'/auth/permissions')
             .then(function(resp) {
                 console.log(resp.data);
                 return resp.data;

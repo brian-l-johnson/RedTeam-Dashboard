@@ -82,7 +82,7 @@ router.post('/login', function(req, res) {
 	User.findOne({email: req.body.email}, function(err, user) {
 		if(err) return res.staus(500).send({"error": "database error"});
 		if(!user) {
-			console.log("user does not exist");
+			console.log("user %s does not exist", req.body.email);
 			return res.status(401).send({"error": "authentication failure"}) // timing attack for valid account determination possible here
 		}
 		bcrypt.compare(req.body.password, user.password, function(err, match) {

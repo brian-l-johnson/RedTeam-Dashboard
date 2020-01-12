@@ -43,10 +43,12 @@ app.use(function(req, res, next) {
   next();
 });
 
+
 app.use('/hosts', HostController);
 app.use('/teams', TeamController);
 app.use('/nmap', NmapController);
 app.use('/vulnerability', VulnerabilityController);
 app.use('/auth', AuthController);
+
 
 module.exports = app;

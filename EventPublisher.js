@@ -1,6 +1,6 @@
 var amqp = require('amqplib/callback_api');
 const { IncomingWebhook } = require('@slack/client');
-const url = "https://hooks.slack.com/services/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";
+const url = process.env.SLACK_WEBHOOK;
 const webhook = new IncomingWebhook(url);
 
 module.exports = class EventPublisher {
