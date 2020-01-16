@@ -6,9 +6,11 @@ var compression = require('compression');
 var app = express();
 const path = require('path');
 
-var db = require('./db');
-
 require('dotenv').config();
+
+var db = require('./db');
+//var mongoose = require('mongoose');
+//mongoose.connect(process.env.MONGOOSE_STRING);
 
 var HostController = require('./HostController');
 var TeamController = require('./TeamController');
@@ -20,7 +22,7 @@ var session = require('express-session');
 var FileStore = require('session-file-store')(session);
 app.use(session({
   name: 'sessionid',
-  secret: 'DhcBgTRUtH4OoVMZYfOS6Y9YZSwLgy',
+  secret: process.env.SESSION_SECRET,
   saveUninitialized: true,
   resave: true,
   store: new FileStore()

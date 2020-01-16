@@ -1,8 +1,8 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var commentSchema = require('./comment').schema;
-var historySchema = require('./porthistory').schema;
-var vulnerabilitySchema = require('./vulnerability').schema;
+var commentSchema = require('./Comment').schema;
+var historySchema = require('./Porthistory').schema;
+var vulnerabilitySchema = require('./Vulnerability').schema;
 
 var portSchema = mongoose.Schema({
 	port: Number,

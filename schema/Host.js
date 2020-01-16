@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var commentSchema = require('./comment').schema;
-var portSchema = require('./port').schema;
+var commentSchema = require('./Comment').schema;
+var portSchema = require('./Port').schema;
 
 var hostSchema = new mongoose.Schema({
     //_id: mongoose.Schema.Types.ObjectId,

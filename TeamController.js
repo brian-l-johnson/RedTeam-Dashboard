@@ -12,7 +12,7 @@ router.use(bodyParser.json());
 var EventPublisher = require('./EventPublisher');
 const publisher = new EventPublisher();
 
-var Team = require('./schema/team');
+var Team = require('./schema/Team');
 
 /*
 router.use(function(req, res, next) {
