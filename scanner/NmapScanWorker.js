@@ -32,7 +32,7 @@ doWebAuth().then(function(data) {
 });
 */
 
-amqp.connect('amqp://127.0.0.1:5672', function(err, conn) {
+amqp.connect(process.env.RABBIT_STRING, function(err, conn) {
     conn.createChannel(function(err, ch) {
         var q = 'nmap-scan';
 

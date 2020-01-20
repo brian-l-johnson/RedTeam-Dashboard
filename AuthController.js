@@ -79,6 +79,7 @@ router.post('/register', function(req, res) {
 });
 
 router.post('/login', function(req, res) {
+	console.log("in login for %s", req.body.email);
 	User.findOne({email: req.body.email}, function(err, user) {
 		if(err) return res.staus(500).send({"error": "database error"});
 		if(!user) {

@@ -30,7 +30,7 @@ User.find({}, function(err, docs) {
 				User.create({
 					email: "admin@local",
 					password: hash,
-					hanble: 'admin',
+					handle: 'admin',
 					permissions: ['admin', 'view', 'hacker', 'scanner']}, 
 					function(err, user) {
 						if(err) {

@@ -17,6 +17,7 @@ var TeamController = require('./TeamController');
 var NmapController = require('./NmapController');
 var VulnerabilityController = require('./VulnerabilityController');
 var AuthController = require('./AuthController');
+var ExploitController = require('./ExploitController');
 
 var session = require('express-session');
 var FileStore = require('session-file-store')(session);
@@ -51,6 +52,6 @@ app.use('/teams', TeamController);
 app.use('/nmap', NmapController);
 app.use('/vulnerability', VulnerabilityController);
 app.use('/auth', AuthController);
-
+app.use('/exploit', ExploitController);
 
 module.exports = app;
