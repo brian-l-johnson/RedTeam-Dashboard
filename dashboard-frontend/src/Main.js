@@ -10,6 +10,7 @@ import Logout from './Logout';
 import UserManagement from './UserManagement';
 import Vulnerabilities from './Vulnerabilities';
 import Vulns from './Vulns';
+import Rules from './Rules';
 
 class Main extends Component {
     constructor(props) {
@@ -48,7 +49,7 @@ class Main extends Component {
                     <Route path='/Hosts' component={Hosts} />
                     <Route path='/Host/:ip' component={Hosts} />
                     <Route path='/Vulnerabilities' component={Vulns}/>
-        
+                    <Route path='/Rules' component={Rules}/>
                     <Route path='/Register' component={Register}/>
                     <Route path='/Login' component={Login}/>
                     <Route path='/Logout' component={Logout}/>

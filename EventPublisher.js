@@ -1,6 +1,10 @@
 var amqp = require('amqplib/callback_api');
 const { IncomingWebhook } = require('@slack/client');
 const url = process.env.SLACK_WEBHOOK;
+var ExploitRule = require('./schema/ExploitRule')
+
+
+
 const webhook = new IncomingWebhook(url);
 
 module.exports = class EventPublisher {
@@ -39,15 +43,15 @@ module.exports = class EventPublisher {
             case "scan complete":
                 console.log(type+":"+message);
                 this.sendSlackMessage("nmap scan complete against team "+message.team);
-                this.publishMessage(message);
+                this.publishMessage('nmap-scan', message);
                 break;
             case "new team":
                 console.log(type+":"+message);
-                this.publishMessage(message);
+                this.publishMessage('nmap-scan', message);
             case "exploit":
                 console.log(type+":"+message);
                 break
-        }
+        }publishMe
     }
 
     sendSlackMessage(msg) {
@@ -62,14 +66,26 @@ module.exports = class EventPublisher {
         )
     }
 
-    publishMessage(msg) {
+    checkRule(msg) {
+        ExploitRule.find({}, function(err, rules) {
+            if(err) return;
+            rules.map(rule => {
+                if(msg.port === rule.port) {
+                    rule['ip'] = msg.ipl
+                    publishMessage('msf-attack', rule);
+                }
+            });
+        });
+    }
+
+    publishMessage(queue, msg) {
         amqp.connect(process.env.RABBIT_STRING, function(err, conn) {
             if(err) {
                 console.log(err);
             }
             conn.createChannel(function(err, ch) {
-                ch.assertQueue("nmap-scan", {durable: false});
-                ch.sendToQueue("nmap-scan", new Buffer(msg));
+                ch.assertQueue(queue, {durable: false});
+                ch.sendToQueue(queue, new Buffer(msg));
                 console.log("[x] sent "+msg);
             });
             setTimeout(function() {conn.close()}, 500);

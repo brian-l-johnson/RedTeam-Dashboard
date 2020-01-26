@@ -62,6 +62,9 @@ class Header extends Component {
 								<li className="nav-item">
 									<Link className="nav-link" to="/Vulnerabilities">Vulnerabilities</Link>
 								</li>
+								<li>
+									<Link className="nav-link" to="/Rules">Exploit Rules</Link>
+								</li>
 
 								{
 									((typeof(this.state.permissions.indexOf) === "function") && (this.state.permissions.indexOf('admin') > -1)) && (
