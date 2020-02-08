@@ -58,6 +58,8 @@ if(process.env.HTTPS) {
 		ca: ca
 	};	
 
+	const httpsServer = https.createServer(credentials, app);
+
 	httpsServer.listen(port, () => {
 		console.log("HTTPS Server listening on port "+port);
 	});

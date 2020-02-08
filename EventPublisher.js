@@ -53,7 +53,7 @@ module.exports = class EventPublisher {
             case "exploit":
                 console.log(type+":"+message);
                 break
-        }publishMe
+        }
     }
 
     sendSlackMessage(msg) {
