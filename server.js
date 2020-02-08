@@ -6,7 +6,7 @@ const https = require('https');
 
 const httpServer = http.createServer(app);
 const httpsServer = https.createServer(app);
-
+const fs = require('fs');
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 var User = require('./schema/User');
