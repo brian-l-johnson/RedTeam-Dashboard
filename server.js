@@ -12,6 +12,8 @@ const saltRounds = 10;
 var User = require('./schema/User');
 const cRandomString = require('crypto-random-string');
 
+require('dotenv').config();
+
 
 User.find({}, function(err, docs) {
 	if(err) {
@@ -48,9 +50,9 @@ User.find({}, function(err, docs) {
 
 if(process.env.HTTPS) {
 	// Certificate
-	const privateKey = fs.readFileSync('/etc/letsencrypt/live/yourdomain.com/privkey.pem', 'utf8');
-	const certificate = fs.readFileSync('/etc/letsencrypt/live/yourdomain.com/cert.pem', 'utf8');
-	const ca = fs.readFileSync('/etc/letsencrypt/live/yourdomain.com/chain.pem', 'utf8');
+	const privateKey = fs.readFileSync(process.env.CERT_PATH+'/privkey.pem', 'utf8');
+	const certificate = fs.readFileSync(process.env.CERT_PATH+'/cert.pem', 'utf8');
+	const ca = fs.readFileSync(process.env.CERT_PATH+'/chain.pem', 'utf8');
 
 	const credentials = {
 		key: privateKey,
