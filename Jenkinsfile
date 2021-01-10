@@ -10,9 +10,7 @@ pipeline {
               expression {
                 params.FULLBUILD
               }
-
             }
-
           }
           steps {
             dir(path: 'backend') {
@@ -21,9 +19,8 @@ pipeline {
 
           }
         }
-
-    
     }
+  }
   }
   environment {
     tag = VersionNumber(versionNumberString: '${BUILD_DATE_FORMATTED,"yyyyMMdd"}_${BUILDS_TODAY}')
