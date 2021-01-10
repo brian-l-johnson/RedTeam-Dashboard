@@ -2,6 +2,26 @@ pipeline {
   agent any
   stages {
     stage('build project') {
+      parallel {
+        stage('build backend') {
+          when {
+            anyOf {
+              changeset '/**'
+              expression {
+                params.FULLBUILD
+              }
+
+            }
+
+          }
+          steps {
+            dir(path: 'backend') {
+              sh 'pnpm install --production'
+            }
+
+          }
+        }
+
     
     }
   }
