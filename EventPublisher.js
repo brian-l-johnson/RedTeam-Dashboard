@@ -27,6 +27,7 @@ module.exports = class EventPublisher {
                 break;
             case "new port":
                 console.log(type+":"+message);
+                this.checkRule(message);
                 this.sendSlackMessage("port "+message.port+" opened for team: "+message.team+" on "+message.ip);
                 break;
             case "port closed":
@@ -35,6 +36,7 @@ module.exports = class EventPublisher {
                 break;
             case "port reopened":
                 console.log(type+":"+message);
+                this.checkRule(message);
                 this.sendSlackMessage("port "+message.port+" reopened for team: "+message.team+" on "+message.ip);
                 break;
             case "port down":
@@ -51,7 +53,7 @@ module.exports = class EventPublisher {
             case "exploit":
                 console.log(type+":"+message);
                 break
-        }publishMe
+        }
     }
 
     sendSlackMessage(msg) {

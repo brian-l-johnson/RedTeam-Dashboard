@@ -90,8 +90,8 @@ class Header extends Component {
 							</ul>
 						) : (
 							<ul className="navbar-nav ml-auto">
-								<li>
-									{window.user}
+								<li className="nav-link">
+									User:{window.user}
 								</li>
 								<li className="nav-item">
 									<Link className="nav-link" to="/Logout">Logout</Link>

@@ -6,11 +6,13 @@ const https = require('https');
 
 const httpServer = http.createServer(app);
 const httpsServer = https.createServer(app);
-
+const fs = require('fs');
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 var User = require('./schema/User');
 const cRandomString = require('crypto-random-string');
+
+require('dotenv').config();
 
 
 User.find({}, function(err, docs) {
@@ -48,15 +50,17 @@ User.find({}, function(err, docs) {
 
 if(process.env.HTTPS) {
 	// Certificate
-	const privateKey = fs.readFileSync('/etc/letsencrypt/live/yourdomain.com/privkey.pem', 'utf8');
-	const certificate = fs.readFileSync('/etc/letsencrypt/live/yourdomain.com/cert.pem', 'utf8');
-	const ca = fs.readFileSync('/etc/letsencrypt/live/yourdomain.com/chain.pem', 'utf8');
+	const privateKey = fs.readFileSync(process.env.CERT_PATH+'/privkey.pem', 'utf8');
+	const certificate = fs.readFileSync(process.env.CERT_PATH+'/cert.pem', 'utf8');
+	const ca = fs.readFileSync(process.env.CERT_PATH+'/chain.pem', 'utf8');
 
 	const credentials = {
 		key: privateKey,
 		cert: certificate,
 		ca: ca
 	};	
+
+	const httpsServer = https.createServer(credentials, app);
 
 	httpsServer.listen(port, () => {
 		console.log("HTTPS Server listening on port "+port);

@@ -180,7 +180,7 @@ module Msf
       # more than 60 characters, but there are no hard limits.
       #
       def desc
-        "Demonstrates using framework plugins"
+        "reports new sessions to the dashboard"
       end
     
     protected
