@@ -13,6 +13,8 @@ var EventPublisher = require('./EventPublisher');
 const publisher = new EventPublisher();
 
 var Team = require('./schema/Team');
+var Host = require('./schema/Host');
+//const { default: Host } = require('./dashboard-frontend/src/Host.js');
 
 /*
 router.use(function(req, res, next) {
@@ -56,6 +58,22 @@ router.get('/:id', authMiddleware.isAuthenticated(), authMiddleware.hasRole("vie
 		if(!team) return res.status(404).send("no team found");
 		res.status(200).send(team);
 	});
+});
+
+router.delete('/:id', authMiddleware.isAuthenticated(), authMiddleware.hasRole('admin'), function(req, res) {
+	console.log("in delete for id: "+req.params.id)
+	Host.deleteMany({team: req.params.id}, function(err, hosts) {
+		if(err) return res.status(500).send("there was a problem finding the hosts");
+		console.log(hosts)
+
+	});
+	Team.findByIdAndRemove(req.params.id, function(err, team) {
+		if(err) return res.status(500).send("THere was a problem finding the team");
+		if(!team) return res.status(404).send("no team found");
+		console.log("deleted!"+team)
+		res.status(200).send(team);
+	});
+
 });
 
 router.post('/:id/comments', authMiddleware.isAuthenticated(), authMiddleware.hasRole("hacker"), function(req, res) {

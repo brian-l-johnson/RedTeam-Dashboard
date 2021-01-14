@@ -6,7 +6,7 @@ class Header extends Component {
 	constructor(props) {
     	super(props);
     	this.state = {
-			permissions: ['foo'],
+			permissions: [],
 			loggedin: false
 		}
 	}
@@ -39,6 +39,9 @@ class Header extends Component {
             return response.json();
         })
         .then(user => {
+			console.log("logged in:");
+			console.log(user);
+			console.log(user.permissions);
 			this.setState({"permissions": user.permissions});
 			this.setState({"user": user.handle});
 			window.user = user.handle;
@@ -57,6 +60,7 @@ class Header extends Component {
 	  }
 	
 	  onRouteChanged() {
+		console.log("getting user info");
 		this.getUserInfo();
 	  }
 
@@ -86,7 +90,7 @@ class Header extends Component {
 								</li>
 
 								{
-									((typeof(this.state.permissions.indexOf) === "function") && (this.state.permissions.indexOf('admin') > -1)) && (
+									((this.state.loggedin && typeof(this.state.permissions) !== 'undefined' && typeof(this.state.permissions.indexOf) === "function") && (this.state.permissions.indexOf('admin') > -1)) && (
 										<li className="navbar-nav">
 											<Link className="nav-link" to="/UserManagement">User Management</Link>
 										</li>

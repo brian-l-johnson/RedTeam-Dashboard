@@ -46,7 +46,13 @@ class Teams extends Component {
           this.props.history.push("/team/"+teamName);
       }
       deleteTeam = event => {
+          console.log(event.target);
           console.log("deleting team: "+event.target.name);
+
+          fetch(window.API_URL+'/teams/'+event.target.name, {
+            method: "DELETE",
+            credentials: 'include'
+          });
       }
     
     
@@ -69,7 +75,7 @@ class Teams extends Component {
                                 {
 									((typeof(window.permissions.indexOf) === "function") && (window.permissions.indexOf('admin') > -1)) && (
 										<td>
-                                            <button type="button" name={team._id} onClick={this.deleteTeam}>Deleta</button>
+                                            <button type="button" name={team._id} onClick={this.deleteTeam}>Delete</button>
                                         </td>
 									)
 								}
