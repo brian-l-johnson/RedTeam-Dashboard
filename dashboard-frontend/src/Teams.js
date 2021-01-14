@@ -45,6 +45,9 @@ class Teams extends Component {
       handleClick(teamName) {
           this.props.history.push("/team/"+teamName);
       }
+      deleteTeam = event => {
+          console.log("deleting team: "+event.target.name);
+      }
     
     
     render() {
@@ -60,9 +63,16 @@ class Teams extends Component {
                     <tbody>
                         {
                         this.state.teams.map(team => (
-                            <tr key={team.name} onClick={this.handleClick.bind(this, team._id)}> 
-                                <td>{team.name}</td>
-                                <td>{team.range}</td>
+                            <tr key={team.name} > 
+                                <td onClick={this.handleClick.bind(this, team._id)}>{team.name}</td>
+                                <td onClick={this.handleClick.bind(this, team._id)}>{team.range}</td>
+                                {
+									((typeof(window.permissions.indexOf) === "function") && (window.permissions.indexOf('admin') > -1)) && (
+										<td>
+                                            <button type="button" name={team._id} onClick={this.deleteTeam}>Deleta</button>
+                                        </td>
+									)
+								}
                             </tr>
 
 

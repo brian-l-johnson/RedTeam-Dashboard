@@ -17,6 +17,13 @@ router.get('/permissions', authMiddleware.isAuthenticated(), function(req, res) 
 	return res.status(200).send(req.session.user.permissions);
 });
 
+router.get('/user', authMiddleware.isAuthenticated(), function(req, res) {
+	let user = req.session.user;
+	delete user['password'];
+	
+	return res.status(200).send(user);
+})
+
 router.get('/logout', function(req, res) {
 	req.session.regenerate(function(err) {
 		if(err) return res.status(500).send({error: "failed to destroy session"});

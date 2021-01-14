@@ -10,7 +10,7 @@ class Header extends Component {
 			loggedin: false
 		}
 	}
-
+	/*
 	getUserInfo() {
 		fetch(window.API_URL+'/auth/permissions', {credentials: 'include'})
         .then(response => {
@@ -24,6 +24,25 @@ class Header extends Component {
         })
         .then(permissions => {
 			this.setState({"permissions": permissions});
+        })
+	}
+	*/
+	getUserInfo() {
+		fetch(window.API_URL+'/auth/user', {credentials: 'include'})
+        .then(response => {
+            if(response.status === 401) {
+              this.setState({loggedin: false});
+			}
+			else{
+				this.setState({loggedin: true});
+			}
+            return response.json();
+        })
+        .then(user => {
+			this.setState({"permissions": user.permissions});
+			this.setState({"user": user.handle});
+			window.user = user.handle;
+			window.permissions = user.permissions;
         })
 	}
 
@@ -91,7 +110,7 @@ class Header extends Component {
 						) : (
 							<ul className="navbar-nav ml-auto">
 								<li className="nav-link">
-									User:{window.user}
+									{this.state.user}
 								</li>
 								<li className="nav-item">
 									<Link className="nav-link" to="/Logout">Logout</Link>
