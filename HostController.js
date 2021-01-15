@@ -46,6 +46,19 @@ router.get('/:ip', authMiddleware.isAuthenticated(), authMiddleware.hasRole('vie
 	});
 }) ;
 
+router.get('/port/:port', authMiddleware.isAuthenticated(), authMiddleware.hasRole('view'), function(req, res) {
+	Host.find({"openPorts.port": req.params.port}, function(err, hosts) {
+		if(err) return res.status(500).send("database error");
+		if(!hosts) return res.status(404).send("not found");
+		filteredHosts = hosts.map(function(host) {
+			host.openPorts = host.openPorts.filter(port => port.port == req.params.port);
+			return host;
+
+		})
+		res.status(200).send(filteredHosts);
+	})
+});
+
 router.post('/:ip/comments', authMiddleware.isAuthenticated(), authMiddleware.hasRole('hacker'), function(req, res) {
 	Host.findOne({ip: req.params.ip}, function(err, host) {
 		if(err) return res.status(300).send("There was a problem finding the host");
