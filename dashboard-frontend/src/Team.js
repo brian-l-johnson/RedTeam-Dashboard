@@ -62,7 +62,7 @@ class Team extends Component{
 
 	render() {
 		return (
-			<div className="teamContainer shadow p-3 mb-5 bg-white rounded card" onClick={this.handleClick.bind(this, this.state.id)}>
+			<div className="teamContainer shadow p-1 mb-5 bg-white rounded card" onClick={this.handleClick.bind(this, this.state.id)}>
 				<h1 className="card-title">Name: {this.state.team.name}</h1>
 				<h2 className="card-subtitle">Range: {this.state.team.range}</h2>
 				{

@@ -29,7 +29,7 @@ router.post('/:team', authMiddleware.isAuthenticated(), authMiddleware.hasRole("
 
     Team.findById(req.params.team, function(err, t) {
         if(err) return console.log("failed to find team");
-        if(!team) return res.status(404).send({error: "team not found"});
+        if(!t) return res.status(404).send({error: "team not found"});
         this.teamName = t.name;
         this.teamRange = t.range;
         console.log(this.teamRange);
