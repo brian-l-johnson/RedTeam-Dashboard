@@ -9,9 +9,9 @@ const saltRounds = 10;
 
 router.use(bodyParser.urlencoded({extended: true}));
 router.use(bodyParser.json());
-var User = require('./schema/User');
+var User = require('../schema/User');
 
-var authMiddleware = require('./authMiddleware');
+var authMiddleware = require('../authMiddleware');
 
 router.get('/permissions', authMiddleware.isAuthenticated(), function(req, res) {
 	return res.status(200).send(req.session.user.permissions);

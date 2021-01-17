@@ -4,16 +4,16 @@ var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
 
-var authMiddleware = require('./authMiddleware.js');
+var authMiddleware = require('../authMiddleware.js');
 
 router.use(bodyParser.urlencoded({extended: true}));
 router.use(bodyParser.json());
 
-var EventPublisher = require('./EventPublisher');
+var EventPublisher = require('../EventPublisher');
 const publisher = new EventPublisher();
 
-var Team = require('./schema/Team');
-var Host = require('./schema/Host');
+var Team = require('../schema/Team');
+var Host = require('../schema/Host');
 //const { default: Host } = require('./dashboard-frontend/src/Host.js');
 
 /*

@@ -6,8 +6,8 @@ var bodyParser = require('body-parser');
 
 router.use(bodyParser.urlencoded({extended: true}));
 router.use(bodyParser.json());
-var Host = require('./schema/Host');
-var authMiddleware = require('./authMiddleware');
+var Host = require('../schema/Host');
+var authMiddleware = require('../authMiddleware');
 
 router.post('/', authMiddleware.isAuthenticated(), authMiddleware.hasRole("hacker"), function(req, res) {
 	console.log("in post handler")

@@ -4,14 +4,14 @@ var bodyParser = require('body-parser');
 
 var async = require("async");
 
-var authMiddleware = require("./authMiddleware");
+var authMiddleware = require("../authMiddleware");
 
-var EventPublisher = require('./EventPublisher');
+var EventPublisher = require('../EventPublisher');
 const publisher = new EventPublisher();
 
 router.use(bodyParser.urlencoded({extended: true}));
 router.use(bodyParser.json());
-var Host = require('./schema/Host');
+var Host = require('../schema/Host');
 //var Team = require('./schema/team');
 var mongoose = require('mongoose');
 var Team = mongoose.model("Team");

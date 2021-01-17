@@ -9,7 +9,8 @@ export function checkPermissions(requiredPermission) {
         },
         error => reject(error))
         .then(permissions => {
-            if(permissions) {
+            console.log("permissions is of type: "+typeof(permissions));
+            if(typeof(permissions.indexOf) === "function") {
                 if(permissions.indexOf(requiredPermission) > -1) {
                     resolve(true);
                 }
