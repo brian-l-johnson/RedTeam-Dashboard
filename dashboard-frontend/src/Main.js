@@ -11,6 +11,7 @@ import UserManagement from './UserManagement';
 import Vulnerabilities from './Vulnerabilities';
 import Vulns from './Vulns';
 import Rules from './Rules';
+import PortList from './PortList';
 
 class Main extends Component {
     constructor(props) {
@@ -53,6 +54,7 @@ class Main extends Component {
                     <Route path='/Register' component={Register}/>
                     <Route path='/Login' component={Login}/>
                     <Route path='/Logout' component={Logout}/>
+                    <Route path='/Ports' component={PortList}/>
         
 
                     <Route path="/UserManagement" component={UserManagement}/>
