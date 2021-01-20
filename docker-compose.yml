@@ -1,0 +1,11 @@
+services:
+    frontend:
+        image: dashboard-frontend
+        build: ./dashboard-frontend
+    api:
+        image: dashboard-api
+        build: ./dashboard-api
+    mongodb:
+        image: mongodb
+    rabbitmq:
+        image: rabbitmq
