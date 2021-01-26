@@ -6,8 +6,8 @@ var bodyParser = require('body-parser');
 
 router.use(bodyParser.urlencoded({extended: true}));
 router.use(bodyParser.json());
-var Host = require('./schema/Host');
-var authMiddleware = require('./authMiddleware');
+var Host = require('../schema/Host');
+var authMiddleware = require('../authMiddleware');
 
 router.post('/', authMiddleware.isAuthenticated(), authMiddleware.hasRole("hacker"), function(req, res) {
 	console.log("in post handler")
@@ -45,6 +45,38 @@ router.get('/:ip', authMiddleware.isAuthenticated(), authMiddleware.hasRole('vie
 		res.status(200).send(host);
 	});
 }) ;
+
+router.get('/port/list', authMiddleware.isAuthenticated(), authMiddleware.hasRole('view'), function(req, res) {
+	Host.find({}, function(err, hosts) {
+		if(err) return res.status(500).send("database error");
+		if(!hosts) return res.status(404).send("not found");
+		ports = hosts.reduce(function(acc, host) {
+			plist = host.openPorts.reduce(function(acc, port) {
+				return acc.concat(port.port);
+			}, []);
+			plist.forEach(p => {
+				acc.add(p);
+			});
+			return acc;
+		},new Set());
+		parray = Array.from(ports);
+		parray.sort(function(a, b){return a-b});
+		res.status(200).send(parray);
+	})
+});
+
+router.get('/port/:port', authMiddleware.isAuthenticated(), authMiddleware.hasRole('view'), function(req, res) {
+	Host.find({"openPorts.port": req.params.port}, function(err, hosts) {
+		if(err) return res.status(500).send("database error");
+		if(!hosts) return res.status(404).send("not found");
+		filteredHosts = hosts.map(function(host) {
+			host.openPorts = host.openPorts.filter(port => port.port == req.params.port);
+			return host;
+
+		})
+		res.status(200).send(filteredHosts);
+	})
+});
 
 router.post('/:ip/comments', authMiddleware.isAuthenticated(), authMiddleware.hasRole('hacker'), function(req, res) {
 	Host.findOne({ip: req.params.ip}, function(err, host) {

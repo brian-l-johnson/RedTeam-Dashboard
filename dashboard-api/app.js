@@ -8,16 +8,18 @@ const path = require('path');
 
 require('dotenv').config();
 
+console.log(process.env.ALLOWED_CORS_ORIGINS);
+
 var db = require('./db');
 //var mongoose = require('mongoose');
 //mongoose.connect(process.env.MONGOOSE_STRING);
 
-var HostController = require('./HostController');
-var TeamController = require('./TeamController');
-var NmapController = require('./NmapController');
-var VulnerabilityController = require('./VulnerabilityController');
-var AuthController = require('./AuthController');
-var ExploitController = require('./ExploitController');
+var HostController = require('./controllers/HostController');
+var TeamController = require('./controllers/TeamController');
+var NmapController = require('./controllers/NmapController');
+var VulnerabilityController = require('./controllers/VulnerabilityController');
+var AuthController = require('./controllers/AuthController');
+var ExploitController = require('./controllers/ExploitController');
 
 var session = require('express-session');
 var FileStore = require('session-file-store')(session);
@@ -39,10 +41,15 @@ app.get('/', function(req, res) {
 });
 
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://127.0.0.1:3000");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT");
-  res.header("Access-Control-Allow-Credentials", "true");
+  let origin = req.get('origin');
+  let allowedOrigns = process.env.ALLOWED_CORS_ORIGINS.split(",");
+  console.log("allowed origins: "+allowedOrigns);
+  if(allowedOrigns.includes(origin)) {
+    res.header("Access-Control-Allow-Origin", origin);
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT");
+    res.header("Access-Control-Allow-Credentials", "true");  
+  }
   next();
 });
 

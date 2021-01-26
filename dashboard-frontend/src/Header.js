@@ -6,11 +6,11 @@ class Header extends Component {
 	constructor(props) {
     	super(props);
     	this.state = {
-			permissions: ['foo'],
+			permissions: [],
 			loggedin: false
 		}
 	}
-
+	/*
 	getUserInfo() {
 		fetch(window.API_URL+'/auth/permissions', {credentials: 'include'})
         .then(response => {
@@ -26,6 +26,28 @@ class Header extends Component {
 			this.setState({"permissions": permissions});
         })
 	}
+	*/
+	getUserInfo() {
+		fetch(window.API_URL+'/auth/user', {credentials: 'include'})
+        .then(response => {
+            if(response.status === 401) {
+              this.setState({loggedin: false});
+			}
+			else{
+				this.setState({loggedin: true});
+			}
+            return response.json();
+        })
+        .then(user => {
+			console.log("logged in:");
+			console.log(user);
+			console.log(user.permissions);
+			this.setState({"permissions": user.permissions});
+			this.setState({"user": user.handle});
+			window.user = user.handle;
+			window.permissions = user.permissions;
+        })
+	}
 
 	componentDidMount() {
 		this.getUserInfo();
@@ -38,6 +60,7 @@ class Header extends Component {
 	  }
 	
 	  onRouteChanged() {
+		console.log("getting user info");
 		this.getUserInfo();
 	  }
 
@@ -60,6 +83,9 @@ class Header extends Component {
 									<Link className="nav-link" to="/Hosts">Hosts</Link>
 								</li>
 								<li className="nav-item">
+									<Link className="nav-link" to="/Ports">Ports</Link>
+								</li>
+								<li className="nav-item">
 									<Link className="nav-link" to="/Vulnerabilities">Vulnerabilities</Link>
 								</li>
 								<li>
@@ -67,7 +93,7 @@ class Header extends Component {
 								</li>
 
 								{
-									((typeof(this.state.permissions.indexOf) === "function") && (this.state.permissions.indexOf('admin') > -1)) && (
+									((this.state.loggedin && typeof(this.state.permissions) !== 'undefined' && typeof(this.state.permissions.indexOf) === "function") && (this.state.permissions.indexOf('admin') > -1)) && (
 										<li className="navbar-nav">
 											<Link className="nav-link" to="/UserManagement">User Management</Link>
 										</li>
@@ -91,7 +117,7 @@ class Header extends Component {
 						) : (
 							<ul className="navbar-nav ml-auto">
 								<li className="nav-link">
-									User:{window.user}
+									{this.state.user}
 								</li>
 								<li className="nav-item">
 									<Link className="nav-link" to="/Logout">Logout</Link>

@@ -5,11 +5,11 @@ import PortRow from './PortRow';
 class PortTable extends Component{
 	render() {
 		return (
-            <div className="card">
+            <div className="card p-0">
                 <div className="card-header">
                     Open Ports
                 </div>
-                <div className="card-body">
+                <div className="card-body p-0">
                     <table className="table table-striped table-sm">
                         <thead>
                             <tr>

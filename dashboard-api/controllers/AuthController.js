@@ -9,13 +9,20 @@ const saltRounds = 10;
 
 router.use(bodyParser.urlencoded({extended: true}));
 router.use(bodyParser.json());
-var User = require('./schema/User');
+var User = require('../schema/User');
 
-var authMiddleware = require('./authMiddleware');
+var authMiddleware = require('../authMiddleware');
 
 router.get('/permissions', authMiddleware.isAuthenticated(), function(req, res) {
 	return res.status(200).send(req.session.user.permissions);
 });
+
+router.get('/user', authMiddleware.isAuthenticated(), function(req, res) {
+	let user = req.session.user;
+	delete user['password'];
+	
+	return res.status(200).send(user);
+})
 
 router.get('/logout', function(req, res) {
 	req.session.regenerate(function(err) {
