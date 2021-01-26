@@ -1,11 +1,25 @@
+version: "3.3"
 services:
-    frontend:
-        image: dashboard-frontend
-        build: ./dashboard-frontend
-    api:
-        image: dashboard-api
-        build: ./dashboard-api
-    mongodb:
-        image: mongodb
-    rabbitmq:
-        image: rabbitmq
+  frontend:
+    image: dashboard-frontend
+    build: ./dashboard-frontend
+    ports:
+      - "3000:80"
+    env_file:
+      - ./dashboard-frontend/.env  
+  api:
+    image: dashboard-api
+    build: ./dashboard-api
+    ports:
+      - "3001:3001"
+    depends_on:
+      - "mongo"
+      - "rabbitmq"
+    env_file:
+    - ./dashboard-api/.env
+  mongo:
+    image: mongoasd
+  rabbitmq:
+    image: rabbitmq
+    ports:
+      - "5672:5672"
