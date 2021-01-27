@@ -17,7 +17,7 @@ class Rules extends Component {
       }
     
     componentDidMount() {
-        this.interval = setInterval(() => fetch('http://127.0.0.1:3001/exploit/rule', {credentials: 'include'})
+        this.interval = setInterval(() => fetch(window.API_URL+'/exploit/rule', {credentials: 'include'})
           .then(response => response.json())
           .then(data => this.setState({rules: data})),1000);
     }
