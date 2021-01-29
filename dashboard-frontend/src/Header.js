@@ -88,6 +88,9 @@ class Header extends Component {
 								<li className="nav-item">
 									<Link className="nav-link" to="/Vulnerabilities">Vulnerabilities</Link>
 								</li>
+								<li className="nav-item">
+									<Link className="nav-link" to="/Actions">Actions</Link>
+								</li>
 								<li>
 									<Link className="nav-link" to="/Rules">Exploit Rules</Link>
 								</li>

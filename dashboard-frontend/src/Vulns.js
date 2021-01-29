@@ -36,7 +36,7 @@ class Vulns extends Component{
                                 host.ports && host.ports.map(port => (
                                     <div key={host.host+":"+port._id}>
                                         <h3>{port.port}</h3>
-                                        <Vulnerabilities port={port.port} vulnerabilities={port.vulnerabilities} host={host.ip}/>
+                                        <Vulnerabilities port={port.port} vulnerabilities={port.vulnerabilities} host={host.host}/>
                                     </div>
                                 ))
                             }

@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
+import ActionTarget from './ActionTarget';
+import {sortHosts} from './utils';
 
-class User extends Component{
+
+class Actions extends Component{
 	constructor(props) {
         super(props);
         this.state = {
-            teams: [],
+			teams: [],
+			hosts: [],
+			vulns: [],
         }
         /*
         if(typeof(this.props.match.params.ip) !== 'undefined') {
@@ -14,14 +19,22 @@ class User extends Component{
     }
     
     componentDidMount() {
-        this.interval = setInterval(() => fetch(window.API_URL+'/teams', {credentials: 'include'})
+        fetch(window.API_URL+'/teams', {credentials: 'include'})
           .then(response => response.json())
-          .then(data => this.setState({hosts: data})),1000);
-          
+          .then(data => this.setState({teams: data}));
+		
+		fetch(window.API_URL+'/hosts', {credentials: 'include'})
+		  .then(response => response.json())
+		  .then(data => this.setState({hosts: data}));
     }
     componentWillUnmount() {
         clearInterval(this.interval);
-    }
+	}
+	addVulnInstance = data => {
+		console.log(data);
+		this.setState({vulns: [...this.state.vulns, data]});
+		console.log(this.state.vulns);
+	}
 	
 	render() {
 		return (
@@ -39,12 +52,46 @@ class User extends Component{
 							<th>
 								Description
 							</th>
+							{
+								this.state.teams.map(team => (
+									<th key={team.name}>
+										Team {team.name}
+									</th>
+								))
+							}
 						</tr>
 					</thead>
+					<tbody>
+						<tr>
+							<td>
+								{new Date().toUTCString()}
+							</td>
+							<td>
+								{window.user}
+							</td>
+							<td>
+								<input type="text" className="form-text form-control" id="actionNote" placeholder="Action notes..." />
+							</td>
+							{
+								this.state.teams.map(team => (
+									<td key={team._id}>	
+										{}										{
+											this.state.vulns.filter(vuln => {return vuln.team === team._id}).map(vuln => (
+												<div>{vuln.host}:{vuln.port} {vuln.severity} ({vuln.notes})</div>
+											))
+										}		
+										<ActionTarget hosts={sortHosts(this.state.hosts.filter(host => {return host.team === team._id}))} key={team._id} updateFunction={this.addVulnInstance}/>
+									</td>
+	
+								))
+
+							}
+						</tr>
+					</tbody>
 				</table>
 			</div>
 		);
 	}
 
 }
-export default ActionList;
+export default Actions;
