@@ -20,6 +20,7 @@ var NmapController = require('./controllers/NmapController');
 var VulnerabilityController = require('./controllers/VulnerabilityController');
 var AuthController = require('./controllers/AuthController');
 var ExploitController = require('./controllers/ExploitController');
+var ActionController = require('./controllers/ActionController');
 
 var session = require('express-session');
 var FileStore = require('session-file-store')(session);
@@ -60,5 +61,6 @@ app.use('/nmap', NmapController);
 app.use('/vulnerability', VulnerabilityController);
 app.use('/auth', AuthController);
 app.use('/exploit', ExploitController);
+app.use('/actions', ActionController);
 
 module.exports = app;
