@@ -10,6 +10,7 @@ class Actions extends Component{
 			teams: [],
 			hosts: [],
 			vulns: [],
+			note: ""
         }
         /*
         if(typeof(this.props.match.params.ip) !== 'undefined') {
@@ -34,6 +35,16 @@ class Actions extends Component{
 		console.log(data);
 		this.setState({vulns: [...this.state.vulns, data]});
 		console.log(this.state.vulns);
+	}
+	submitAction = () => {
+		console.log(this.state.note);
+		this.state.vulns.map(vuln => {
+			console.log(vuln);
+			return vuln;
+		});
+	}
+	updateNote = event => {
+		this.setState({note: event.target.value})
 	}
 	
 	render() {
@@ -70,7 +81,7 @@ class Actions extends Component{
 								{window.user}
 							</td>
 							<td>
-								<input type="text" className="form-text form-control" id="actionNote" placeholder="Action notes..." />
+								<input type="text" className="form-text form-control" id="actionNote" placeholder="Action notes..." onChange={this.updateNote}/>
 							</td>
 							{
 								this.state.teams.map(team => (
@@ -86,6 +97,11 @@ class Actions extends Component{
 								))
 
 							}
+							<td>
+								<button type="button" className="btn btn-primary" onClick={this.submitAction}>
+									Submit
+								</button>
+							</td>
 						</tr>
 					</tbody>
 				</table>

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import VulnerabilityModal from './VulnerabilityModal';
 
 class ActionTarget extends Component{
 	constructor(props) {
@@ -45,7 +44,7 @@ class ActionTarget extends Component{
 				<button type="button" className="btm btn-primary" data-toggle="modal" data-target="#addVulnModel" onClick={this.toggleVulnModal}>Add Vulnerability</button>
 				{
 					this.state.isOpen && (
-						<div className="modal fade show" style={{display: "block", "backgroundColor": "rgb(0,0,0,0,5)"}} id="addVulnModal" tabIndex="-1" role="dialog" aria-labelledby="addVulnModelTitle" aria-hidden="true">
+						<div className="modal fade show" style={{display: "block", "backgroundColor": "rgba(0,0,0,0.5)"}} id="addVulnModal" tabIndex="-1" role="dialog" aria-labelledby="addVulnModelTitle" aria-hidden="true">
 							<div className="modal-dialog modal-dialog-centered model-lg" role="document">
 								<div className="modal-content">
 									<div className="modal-header">

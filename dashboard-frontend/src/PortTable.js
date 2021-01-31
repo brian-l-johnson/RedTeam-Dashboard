@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Vulnerabilities from './Vulnerabilities';
 import PortRow from './PortRow';
 
 class PortTable extends Component{

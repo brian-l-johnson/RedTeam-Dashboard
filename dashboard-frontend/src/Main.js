@@ -8,7 +8,6 @@ import Register from './Register';
 import Login from './Login';
 import Logout from './Logout';
 import UserManagement from './UserManagement';
-import Vulnerabilities from './Vulnerabilities';
 import Vulns from './Vulns';
 import Rules from './Rules';
 import PortList from './PortList';

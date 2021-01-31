@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var vulnerabilityReferenceSchema = require('./VulnerabilityReference');
+var vulnerabilityReferenceSchema = require('./VulnerabilityReference').schema;
 
 
 var actionSchema = new mongoose.Schema({

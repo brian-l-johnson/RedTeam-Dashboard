@@ -5,6 +5,8 @@ var router = express.Router();
 var bodyParser = require('body-parser');
 var authMiddleware = require('../authMiddleware');
 var Action = require('../schema/Action');
+router.use(bodyParser.urlencoded({extended: true}));
+router.use(bodyParser.json());
 
 router.post('/', authMiddleware.isAuthenticated(), authMiddleware.hasRole("hacker"), function(req, res) {
 	Action.create({
@@ -27,5 +29,8 @@ router.get('/', authMiddleware.isAuthenticated(), authMiddleware.hasRole("viewer
             return res.status(500).send("error retrieving actions");
         }
         return res.status(200).send(actions);
-    })
-})
+    });
+});
+
+
+module.exports = router;

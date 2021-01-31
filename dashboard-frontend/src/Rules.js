@@ -34,7 +34,7 @@ class Rules extends Component {
 
         let newExploitOptions = {};
         this.state.exploitOptions.map(eo => {
-            newExploitOptions[eo.key] = eo.value;
+            return newExploitOptions[eo.key] = eo.value;
         })
         newRule['exploitOptions'] = newExploitOptions;
 
