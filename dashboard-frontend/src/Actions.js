@@ -38,10 +38,62 @@ class Actions extends Component{
 	}
 	submitAction = () => {
 		console.log(this.state.note);
-		this.state.vulns.map(vuln => {
+		fetch(window.API_URL+'/actions', {
+			method: "POST",
+			credentials: 'include',
+			headers: {
+				'Content-Type': "application/json"
+			},
+			body: JSON.stringify({
+				description: this.state.note,
+				vulnerabilities: this.state.vulns
+			})
+		})
+		.then(response => {
+			if(!response.ok) {
+				alert("got an error: "+response.statusText);
+			}
+			return response.json();
+		})
+		.then(data => {
+			console.log(data);
+		})
+
+		/*
+		let vulnIds = this.state.vulns.map(vuln => {
 			console.log(vuln);
-			return vuln;
+			let vulnId = ""
+			fetch(window.API_URL+'/vulnerability/'+vuln.host+"/"+vuln.port, {
+				method: "POST",
+				credentials: 'include',
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify(vuln)
+			})
+			.then(response => {
+				if(!response.ok) {
+					alert("got an error: "+response.statusText);
+				}
+				return response.json();
+			})
+			.then(data => {
+				console.log("in response handler");
+				console.log(data);
+				vulnId = data.id;
+				return vulnId;
+			})
+
 		});
+		Promise.all(vulnIds).then(()=> {
+			console.log("got vuln ids");
+			console.log(vulnIds);
+		})
+		*/
+
+
+
+
 	}
 	updateNote = event => {
 		this.setState({note: event.target.value})
