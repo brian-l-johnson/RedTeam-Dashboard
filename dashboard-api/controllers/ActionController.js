@@ -31,7 +31,10 @@ router.post('/', authMiddleware.isAuthenticated(), authMiddleware.hasRole("hacke
 					host.save()
 					vulnRefs.push({ip: vuln.host,
 								   port: vuln.port,
-								   id: newVuln._id
+								   id: newVuln._id,
+								   team: vuln.team,
+								   severity: vuln.severity,
+								   notes: vuln.notes,
 								});
 					callback();
 					return 
@@ -111,7 +114,7 @@ router.post('/', authMiddleware.isAuthenticated(), authMiddleware.hasRole("hacke
 	*/
 });
 
-router.get('/', authMiddleware.isAuthenticated(), authMiddleware.hasRole("viewer"), function(req, res) {
+router.get('/', authMiddleware.isAuthenticated(), authMiddleware.hasRole("view"), function(req, res) {
     Action.find({}, function(err, actions) {
         if(err) {
             return res.status(500).send("error retrieving actions");

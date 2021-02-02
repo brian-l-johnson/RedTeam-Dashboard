@@ -10,6 +10,7 @@ class Actions extends Component{
 			teams: [],
 			hosts: [],
 			vulns: [],
+			actions: [],
 			note: ""
         }
         /*
@@ -27,11 +28,22 @@ class Actions extends Component{
 		fetch(window.API_URL+'/hosts', {credentials: 'include'})
 		  .then(response => response.json())
 		  .then(data => this.setState({hosts: data}));
+		
+		this.interval = setInterval(() => fetch(window.API_URL+'/actions', {credentials: 'include'})
+		  .then(response => {
+			  //if(!response.ok) this.props.history.push('/Login');
+			  //else return response.json();
+			  return response.json();
+		  })
+		  .then(data => this.setState({actions: data})),1000);
+
+		
     }
     componentWillUnmount() {
         clearInterval(this.interval);
 	}
 	addVulnInstance = data => {
+		console.log("data for function:");
 		console.log(data);
 		this.setState({vulns: [...this.state.vulns, data]});
 		console.log(this.state.vulns);
@@ -138,12 +150,12 @@ class Actions extends Component{
 							{
 								this.state.teams.map(team => (
 									<td key={team._id}>	
-										{}										{
+										{
 											this.state.vulns.filter(vuln => {return vuln.team === team._id}).map(vuln => (
 												<div>{vuln.host}:{vuln.port} {vuln.severity} ({vuln.notes})</div>
 											))
 										}		
-										<ActionTarget hosts={sortHosts(this.state.hosts.filter(host => {return host.team === team._id}))} key={team._id} updateFunction={this.addVulnInstance}/>
+										<ActionTarget hosts={sortHosts(this.state.hosts.filter(host => {return host.team === team._id}))} key={team._id} team={team._id} updateFunction={this.addVulnInstance}/>
 									</td>
 	
 								))
@@ -155,6 +167,33 @@ class Actions extends Component{
 								</button>
 							</td>
 						</tr>
+						{
+							this.state.actions.map(action => (
+								<tr>
+									<td>{action.date}</td>
+									<td>{action.hacker}</td>
+									<td>{action.description}</td>
+									{
+										this.state.teams.map(team => (
+											<td>
+												{
+													<ul>
+														{
+															action.vulnerabilities.filter(vuln => {return vuln.team === team._id}).map(vuln => (
+																<li>
+																	{vuln.ip}:{vuln.port} - {vuln.severity} ({vuln.notes})
+																</li>	
+															))
+														}
+
+													</ul>
+												}
+											</td>
+										))
+									}
+								</tr>
+							))
+						}
 					</tbody>
 				</table>
 			</div>
