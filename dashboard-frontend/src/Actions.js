@@ -22,17 +22,26 @@ class Actions extends Component{
     
     componentDidMount() {
         fetch(window.API_URL+'/teams', {credentials: 'include'})
-          .then(response => response.json())
+          .then(response => {
+			  if(!response.ok) {
+				  this.props.history.push('/Login');
+			  }
+			  return response.json()
+		  })
           .then(data => this.setState({teams: data}));
 		
 		fetch(window.API_URL+'/hosts', {credentials: 'include'})
-		  .then(response => response.json())
+		  .then(response => {
+			  if(!response.ok) {
+				  this.props.history.push('/Login');
+			  }
+			  return response.json()
+		  })
 		  .then(data => this.setState({hosts: data}));
 		
 		this.interval = setInterval(() => fetch(window.API_URL+'/actions', {credentials: 'include'})
 		  .then(response => {
-			  //if(!response.ok) this.props.history.push('/Login');
-			  //else return response.json();
+			  if(!response.ok) this.props.history.push('/Login');
 			  return response.json();
 		  })
 		  .then(data => this.setState({actions: data})),1000);
@@ -69,43 +78,9 @@ class Actions extends Component{
 		})
 		.then(data => {
 			console.log(data);
+			document.getElementById('actionNote').value = "";
+			this.setState({vulns: []});
 		})
-
-		/*
-		let vulnIds = this.state.vulns.map(vuln => {
-			console.log(vuln);
-			let vulnId = ""
-			fetch(window.API_URL+'/vulnerability/'+vuln.host+"/"+vuln.port, {
-				method: "POST",
-				credentials: 'include',
-				headers: {
-					"Content-Type": "application/json"
-				},
-				body: JSON.stringify(vuln)
-			})
-			.then(response => {
-				if(!response.ok) {
-					alert("got an error: "+response.statusText);
-				}
-				return response.json();
-			})
-			.then(data => {
-				console.log("in response handler");
-				console.log(data);
-				vulnId = data.id;
-				return vulnId;
-			})
-
-		});
-		Promise.all(vulnIds).then(()=> {
-			console.log("got vuln ids");
-			console.log(vulnIds);
-		})
-		*/
-
-
-
-
 	}
 	updateNote = event => {
 		this.setState({note: event.target.value})

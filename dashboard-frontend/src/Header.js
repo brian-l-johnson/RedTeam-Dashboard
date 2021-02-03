@@ -31,7 +31,8 @@ class Header extends Component {
 		fetch(window.API_URL+'/auth/user', {credentials: 'include'})
         .then(response => {
             if(response.status === 401) {
-              this.setState({loggedin: false});
+			  this.setState({loggedin: false});
+			  this.props.history.push('/Login');
 			}
 			else{
 				this.setState({loggedin: true});
