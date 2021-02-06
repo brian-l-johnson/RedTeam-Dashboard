@@ -43,8 +43,16 @@ class Hosts extends Component {
                 </select>
                 {
                     this.state.selectedHost && <Host hostname={this.state.hosts[this.state.selectedHost].hostname} ip={this.state.hosts[this.state.selectedHost].ip} openPorts={this.state.hosts[this.state.selectedHost].openPorts} comments={this.state.hosts[this.state.selectedHost].comments} key={this.state.hosts[this.state.selectedHost]._id} summary={false}/>
-
                 }
+                <div>
+                    hostlist:
+                    {
+                        this.state.hosts.map(host => (
+                            <p>{host.ip}</p>
+                        ))
+                    }
+                </div>
+
             </div>
 
 		);
