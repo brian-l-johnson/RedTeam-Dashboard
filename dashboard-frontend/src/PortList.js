@@ -44,6 +44,13 @@ class User extends Component{
 				</div>
 				<div>
 					{
+						this.state.hosts.map(host=> (
+							<p key={host.ip}>{host.ip}</p>
+						))
+					}
+				</div>
+				<div>
+					{
 						this.state.hosts.map(host => (
 							<Host hostname={host.hostname} ip={host.ip} openPorts={host.openPorts} comments={host.comments} key={host._id} summary={this.state.summary}/>
 						))
