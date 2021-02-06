@@ -32,8 +32,31 @@ doWebAuth().then(function(data) {
 });
 */
 
-amqp.connect(process.env.RABBIT_STRING, function(err, conn) {
-    conn.createChannel(function(err, ch) {
+var amqpConn = null;
+
+function start() {
+    amqp.connect(process.env.RABBIT_STRING + "?heartbeat=60", function(err, conn) {
+        if (err) {
+        console.error("[AMQP]", err.message);
+        return setTimeout(start, 1000);
+        }
+        conn.on("error", function(err) {
+        if (err.message !== "Connection closing") {
+            console.error("[AMQP] conn error", err.message);
+        }
+        });
+        conn.on("close", function() {
+        console.error("[AMQP] reconnecting");
+        return setTimeout(start, 1000);
+        });
+        console.log("[AMQP] connected");
+        amqpConn = conn;
+        run();
+    });
+}
+
+function run() {
+    amqpConn.createChannel(function(err, ch) {
         var q = 'nmap-scan';
 
         ch.assertQueue(q, {durable: false});
@@ -106,7 +129,7 @@ amqp.connect(process.env.RABBIT_STRING, function(err, conn) {
 
         });
     }, {noAck: false});
-});
+}
 
 function randomIP() {
     while(ip = "10."+Math.floor(Math.random() * 255)+"."+Math.floor(Math.random() * 255)+"."+Math.floor(Math.random() * 255)) {
@@ -142,3 +165,5 @@ function doWebAuth() {
 
         return request;
 }
+
+start();
