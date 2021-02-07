@@ -5,8 +5,8 @@ services:
     build: ./dashboard-frontend
     ports:
       - "3000:80"
-    env_file:
-      - ./dashboard-frontend/.env  
+    environment:
+      - REACT_APP_API_BASE_URL=http://127.0.0.1:3001
   api:
     image: dashboard-api
     build: ./dashboard-api
@@ -15,10 +15,14 @@ services:
     depends_on:
       - "mongo"
       - "rabbitmq"
-    env_file:
-    - ./dashboard-api/.env
+    environment:
+      - RABBIT_STRING=amqp://rabbitmq
+      - MONGOOSE_STRING=mongodb://mongo/ccdc
+      - ALLOWED_CORS_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
+      - SLACK_WEBHOOK=URL
+      - SESSION_SECRET=USESOMETHINGSTRONGHEREORTHISWILLBEINSECURE
   mongo:
-    image: mongoasd
+    image: mongo
   rabbitmq:
     image: rabbitmq
     ports:
