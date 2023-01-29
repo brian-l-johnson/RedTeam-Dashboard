@@ -1,0 +1,26 @@
+{
+	"folders": [
+		{
+			"path": "../../../Documents/PlatformIO/Projects/thermometer-bridge"
+		},
+		{
+			"path": "../../rmi-server"
+		},
+		{
+			"path": "../../../log4j/vuln-app/log4shell-vulnerable-app"
+		},
+		{
+			"path": "../../home-monitor"
+		},
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"string": "cpp",
+			"filesystem": "cpp",
+			"stdexcept": "cpp"
+		}
+	}
+}

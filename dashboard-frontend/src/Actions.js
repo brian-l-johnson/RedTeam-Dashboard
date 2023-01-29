@@ -44,9 +44,7 @@ class Actions extends Component{
 			  if(!response.ok) this.props.history.push('/Login');
 			  return response.json();
 		  })
-		  .then(data => this.setState({actions: data})),1000);
-
-		
+		  .then(data => this.setState({actions: data})),1000);		
     }
     componentWillUnmount() {
         clearInterval(this.interval);

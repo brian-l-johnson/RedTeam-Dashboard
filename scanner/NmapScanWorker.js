@@ -26,11 +26,11 @@ axios.defaults.withCredentials = true;
 
 nmap.nmapLocation = "nmap"
 
-/*
+
 doWebAuth().then(function(data) {
     console.log("got "+data);
 });
-*/
+
 
 var amqpConn = null;
 
