@@ -1,11 +1,12 @@
 var amqp = require('amqplib/callback_api');
-const { IncomingWebhook } = require('@slack/client');
-const url = process.env.SLACK_WEBHOOK;
+//const { IncomingWebhook } = require('@slack/client');
+const {Webhook} = require('discord-webhook-node');
+const url = process.env.DISCORD_WEBHOOK;
 var ExploitRule = require('./schema/ExploitRule')
 
 
 
-const webhook = new IncomingWebhook(url);
+const webhook = new Webhook(url);
 
 module.exports = class EventPublisher {
     constructor() {
@@ -16,11 +17,11 @@ module.exports = class EventPublisher {
         switch(type) {
             case "new host":
                 console.log(type+":"+message);
-                this.sendSlackMessage("new host for team: "+message.team+" with IP "+message.ip);
+                this.sendDiscordMessage("new host for team: "+message.team+" with IP "+message.ip);
                 break;
             case "host down":
                 console.log(type+":"+message);
-                this.sendSlackMessage("host "+message.ip+" down for teams: "+message.team);
+                this.sendDiscordMessage("host "+message.ip+" down for teams: "+message.team);
                 break;
             case "host up":
                 console.log(type+":"+message);
@@ -28,23 +29,23 @@ module.exports = class EventPublisher {
             case "new port":
                 console.log(type+":"+message);
                 this.checkRule(message);
-                this.sendSlackMessage("port "+message.port+" opened for team: "+message.team+" on "+message.ip);
+                this.sendDiscordMessage("port "+message.port+" opened for team: "+message.team+" on "+message.ip);
                 break;
             case "port closed":
                 console.log(type+":"+message);
-                this.sendSlackMessage("port "+message.port+" closed for team: "+message.team+" on "+message.ip);
+                this.sendDiscordMessage("port "+message.port+" closed for team: "+message.team+" on "+message.ip);
                 break;
             case "port reopened":
                 console.log(type+":"+message);
                 this.checkRule(message);
-                this.sendSlackMessage("port "+message.port+" reopened for team: "+message.team+" on "+message.ip);
+                this.sendDiscordMessage("port "+message.port+" reopened for team: "+message.team+" on "+message.ip);
                 break;
             case "port down":
                 console.log(type+":"+message);
                 break;
             case "scan complete":
                 console.log(type+":"+message);
-                this.sendSlackMessage("nmap scan complete against team "+message.team);
+                this.sendDiscordMessage("nmap scan complete against team "+message.team);
                 this.publishMessage('nmap-scan', message);
                 break;
             case "new team":
@@ -56,7 +57,7 @@ module.exports = class EventPublisher {
         }
     }
 
-    sendSlackMessage(msg) {
+    sendDiscordMessage(msg) {
         webhook.send(msg, function(err,res) {
             if(err) {
                 console.log("Error:", err);
